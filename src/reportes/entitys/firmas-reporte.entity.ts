@@ -11,6 +11,8 @@ export class FirmasReporte {
     nombreArchivo: string
     @Column()
     tipo: string
+    @Column()
+    path: string
     @Column({default: '1'})
     esActivo: string
     @Column({default: '1'})

@@ -24,8 +24,7 @@ import { UploadFileS3Service } from './services/upload-file-s3/upload-file-s3.se
     UsersModule,
     ReportesModule,
     ObservacionesModule,
-    HotelesModule
-  
+    HotelesModule,
   ],
   controllers: [AppController],
   providers: [AppService, UploadFileS3Service],

@@ -14,7 +14,10 @@ export class ObservacionImagen {
     esActivo: string
     @Column({type:'datetime',default:()=>'CURRENT_TIMESTAMP'}) 
     fechaRegistro: Date
-
+    @Column()
+    tipoArchivo: string
+    @Column()
+    path: string
     @Column({nullable:true}) /*nullable sirve para poder decir que puede ser null */
     observacionId: number
 

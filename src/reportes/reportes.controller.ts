@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { ReportesService } from './reportes.service';
 import { crearReporteDto } from './dto/crear-reporte.dto';
 import { editarReporteDto } from './dto/editar-reporte.dto';
@@ -24,10 +24,16 @@ export class ReportesController {
     listarUsuario(@Param('id',ParseIntPipe) id:number){   
         return this._reportes.listarReportePorIdTodaLaInfo(id);
     }
+    
 
     @Post()
     createReporte(@Body() newReporte: crearReporteDto){
         return this._reportes.crearReporte(newReporte);
+    }
+
+    @Delete(':id')
+    deleteUser(@Param('id',ParseIntPipe) id:number){
+        return this._reportes.eliminarReporte(id);
     }
 
     @Patch(':id')
@@ -40,4 +46,6 @@ export class ReportesController {
     crearFirmaDeReporte(@UploadedFile() file ,@Body() newFirma: crearFirmaDto){
         return this._reportes.crearFirma(newFirma,file)
     }
+
+    
 }

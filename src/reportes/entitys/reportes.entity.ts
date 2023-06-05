@@ -26,10 +26,12 @@ export class Reportes {
     userlId: number
 
 
-    @OneToOne(()=>Hoteles)
-    @JoinColumn()
+    // @OneToOne(()=>Hoteles)
+    // @JoinColumn()
+    // hoteles:hoteles
+    @ManyToOne(()=>Hoteles,user=>user.reportes)
     hoteles:Hoteles
-    
+
     
     @ManyToOne(()=>User,user=>user.reportes)
     usuario:User

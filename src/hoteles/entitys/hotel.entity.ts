@@ -1,5 +1,6 @@
 import { Entity,Column,PrimaryGeneratedColumn,OneToOne ,JoinColumn ,OneToMany} from "typeorm";
 import { TrabajadoresHotel } from "./trabajador-hotel.entity";
+import { Reportes } from "src/reportes/entitys/reportes.entity";
 
 @Entity({name:'hoteles'})
 export class Hoteles {
@@ -15,4 +16,7 @@ export class Hoteles {
     fechaRegistro: Date
     @OneToMany(()=>TrabajadoresHotel,trabaja=>trabaja.hotel)
     trabajadores:TrabajadoresHotel[]
+    @OneToMany(()=>Reportes,reporte=>reporte.hoteles)
+    reportes:Reportes[]
+    
 }

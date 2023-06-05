@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, JoinColumn, DataSource } from 'typeorm';
 import { Reportes } from './entitys/reportes.entity';
@@ -13,6 +13,9 @@ import { Observacion } from 'src/observaciones/entitys/observacion.entity';
 import { ObservacionImagen } from 'src/observaciones/entitys/observacion-imagen.entity';
 import { UploadFileS3Service } from 'src/services/upload-file-s3/upload-file-s3.service';
 import * as moment from "moment";
+import { ObservacionesService } from 'src/observaciones/observaciones.service';
+import { Hoteles } from 'src/hoteles/entitys/hotel.entity';
+import { User } from 'src/users/entitiys/user.entity';
 @Injectable()
 export class ReportesService {
 
@@ -21,17 +24,25 @@ export class ReportesService {
     private reporteRepositorio: Repository<Reportes>,
     @InjectRepository(FirmasReporte)
     private firmasRepositorio: Repository<FirmasReporte>,
-    @InjectRepository(FirmasReporte)
-    private observacionRepositorio: Repository<FirmasReporte>,
 
     private _user: UsersService,
     private _hotel: HotelesService,
     private dataSource: DataSource,
-    private _aws:UploadFileS3Service
+    private _aws:UploadFileS3Service,
+
+    // @InjectRepository(Observacion)
+    // private observacionRepositorio: Repository<Observacion>,
+    // @InjectRepository(ObservacionImagen)
+    // private observacionImgRepositorio: Repository<ObservacionImagen>,
+
+    private readonly _up: UploadFileS3Service,
+    @Inject (forwardRef(()=>ObservacionesService))private readonly _observaciones: ObservacionesService
   ) {}
 
   listarReportes() {
-    return this.reporteRepositorio.find();
+    return this.reporteRepositorio.find({
+      relations:['hoteles','usuario']
+    });
   }
 
   async listarReportePorIdTodaLaInfo(id: number) {
@@ -39,7 +50,7 @@ export class ReportesService {
       where: {
         idReporte: id,
       },
-    //   relations: ['firmasReporte', 'observaciones',],
+      relations:['hoteles','usuario']
     })
     const queyView = await this.reporteRepositorio
     .createQueryBuilder('reportes')
@@ -47,6 +58,8 @@ export class ReportesService {
     .leftJoinAndMapMany('reportes.observaciones', Observacion, 'observacion', 'observacion.reporteIdReporte = reportes.idReporte')
     .leftJoinAndMapMany('observacion.imagenes', ObservacionImagen, 'imagenes', 'imagenes.observacionIdObservacion = observacion.idObservacion')
     .leftJoinAndMapMany('reportes.firmas', FirmasReporte, 'firmasReporte', 'firmasReporte.reporteId = reportes.idReporte ')
+    .leftJoinAndMapMany('reportes.hoteles', Hoteles, 'hoteles', 'hoteles.idHotel = reportes.hotelId ')
+    .leftJoinAndMapMany('reportes.usuario', User, 'usuario', 'usuario.idUsuario = reportes.userlId ')
     .getMany();
     
     
@@ -82,8 +95,11 @@ export class ReportesService {
     }
 
     const newReport = this.reporteRepositorio.create(reporte);
-
+    console.log(newReport);
+    
     const saveReporte = await this.reporteRepositorio.save(newReport);
+    console.log(saveReporte);
+    
     newReport.usuario = userFound;
     newReport.hoteles = hotelFound;
 
@@ -104,7 +120,35 @@ export class ReportesService {
     }
   }
 
-  eliminar() {}
+  async eliminarReporte(id:number) {
+    const reporteFound = await this.listarReportePorIdSinExecption(
+      id,
+    );
+    if (!reporteFound) {
+      return new HttpException('Reporte no exontrado', HttpStatus.NOT_FOUND);
+    }else{
+      const queyView = await this.reporteRepositorio
+      .createQueryBuilder('reportes')
+      .where(`reportes.idReporte = ${id}`)
+      .leftJoinAndMapMany('reportes.observaciones', Observacion, 'observacion', 'observacion.reporteIdReporte = reportes.idReporte')
+      .getMany();
+      const queyViewFirmas = await this.reporteRepositorio
+      .createQueryBuilder('reportes')
+      .where(`reportes.idReporte = ${id}`)
+      .leftJoinAndMapMany('reportes.firmasReporte', FirmasReporte, 'firmas', 'firmas.reporteFIdReporte = reportes.idReporte')
+      .getMany();
+      const firmas= queyViewFirmas[0].firmasReporte
+      firmas.forEach(async(element) => {
+      this.eliminarFirma(element.idFirmaReporte,element.path) 
+      });
+      const observaciones = queyView[0].observaciones
+      observaciones.forEach(async(element) => {
+      this._observaciones.eliminarObservacion(element.idObservacion)
+      });
+      const result =await this.reporteRepositorio.delete({idReporte:id});
+      return new HttpException('Reporte eliminado', HttpStatus.ACCEPTED)
+    }
+  }
 
   async crearFirma(firma: crearFirmaDto, file) {
     const reporteFound = await this.listarReportePorIdSinExecption(
@@ -113,9 +157,10 @@ export class ReportesService {
     if (!reporteFound) {
       return new HttpException('Reporte no exontrado', HttpStatus.NOT_FOUND);
     }
-    const fileUP = await this._aws.upPublicFile(file.buffer, '1/firmas/'+moment(new Date()).format("YYYY-MM-DD-HH:mm:ss")  );
-    console.log(fileUP);
-    console.log(firma);
+
+    const path= `${firma.reporteId}/firmas/`+moment(new Date()).format("YYYY-MM-DD-HH:mm:ss")
+    const fileUP = await this._aws.upPublicFile(file.buffer, path  );
+    firma.path = path
     firma.url = fileUP.Location;
     firma.nombreArchivo = fileUP.Key;
     const newFirma = this.firmasRepositorio.create(firma);
@@ -124,5 +169,33 @@ export class ReportesService {
     return this.firmasRepositorio.save(saveFima);
   }
 
+  async eliminarFirma(id: number, path: string){
+    if (!id) {
+      return new HttpException('Id no recibido', HttpStatus.NOT_FOUND);
+    }
+
+    const newImgObs = await this.firmasRepositorio.findOne({
+      where: {
+        idFirmaReporte: id,
+      },
+    });
+
+    if (!newImgObs) {
+      return new HttpException(
+        'No hay datos en la base de datos',
+        HttpStatus.NOT_FOUND,
+      );
+    } else {
+      const res = await this.firmasRepositorio.delete({
+        idFirmaReporte: id,
+      });
+
+      if (res.affected === 0) {
+        return new HttpException('Firma no encontrada', HttpStatus.NOT_FOUND);
+      } else {
+        return this._up.deleteBucket(path);
+      }
+    }
+  }
 
 }
