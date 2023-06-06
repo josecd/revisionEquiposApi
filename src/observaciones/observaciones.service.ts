@@ -40,6 +40,7 @@ export class ObservacionesService {
     newObservacion.reporte = reportFound;
     return this.observacionRepositorio.save(saveObservacion);
   }
+  
   async editarObservacion(id,observacion:editarObservacionDto){
     const observacionFound = await this.observacionRepositorio.findOne({
       where: {

@@ -27,7 +27,6 @@ export class ReportesService {
 
     private _user: UsersService,
     private _hotel: HotelesService,
-    private dataSource: DataSource,
     private _aws:UploadFileS3Service,
 
     // @InjectRepository(Observacion)
