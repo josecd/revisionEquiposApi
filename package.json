@@ -20,11 +20,14 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@awesome-cordova-plugins/screen-orientation": "^6.3.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/swagger": "^7.1.1",
     "@nestjs/typeorm": "^9.0.1",
     "aws-sdk": "^2.1390.0",
+    "cordova-plugin-screen-orientation": "^3.0.3",
     "moment": "^2.29.4",
     "mysql2": "^3.3.3",
     "nest-aws-sdk": "^3.0.1",

@@ -33,6 +33,8 @@ export class UsersController {
 
     @Patch(':id')
     editarUsuario(@Param('id',ParseIntPipe) id:number, @Body()user: updateUserDto){
+        console.log('entrando');
+        
         return this._user.updateUsusario(id,user);
     }
 

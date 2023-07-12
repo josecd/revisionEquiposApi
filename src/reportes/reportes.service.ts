@@ -154,10 +154,11 @@ export class ReportesService {
       firma.reporteId,
     );
     if (!reporteFound) {
-      return new HttpException('Reporte no exontrado', HttpStatus.NOT_FOUND);
+      return new HttpException('Reporte no encontrado', HttpStatus.NOT_FOUND);
     }
-
-    const path= `${firma.reporteId}/firmas/`+moment(new Date()).format("YYYY-MM-DD-HH:mm:ss")
+    console.log(file);
+    
+    const path= `${firma.reporteId}/firmas/`+this._up.returnNameDateType(file['mimetype'])
     const fileUP = await this._aws.upPublicFile(file.buffer, path  );
     firma.path = path
     firma.url = fileUP.Location;

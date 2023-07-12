@@ -17,6 +17,8 @@ export class Observacion {
     numeroSerie: string
     @Column()
     area: string
+    @Column()
+    observacion:string;
     @Column({default: '1'})
     esActivo: string
     @Column({type:'datetime',default:()=>'CURRENT_TIMESTAMP'}) 

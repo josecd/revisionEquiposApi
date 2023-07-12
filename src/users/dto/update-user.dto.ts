@@ -1,9 +1,8 @@
 /* eslint-disable prettier/prettier */
 
 export class updateUserDto {
-    username?: string
     password?: string
-
+    nombre?: string
 }
 
 

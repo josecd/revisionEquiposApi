@@ -6,6 +6,8 @@ export class editarObservacionDto {
     modelo?: string
     numeroSerie?: string
     area?: string
+    observacion?:string;
+
 }
 
 

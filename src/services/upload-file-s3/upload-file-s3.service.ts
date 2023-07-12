@@ -7,8 +7,8 @@ import * as moment from 'moment';
 export class UploadFileS3Service {
     bucketName = 'imgrevision';
     s3 = new S3({
-      accessKeyId: '',
-      secretAccessKey: '',
+      accessKeyId: 'AKIARPMZAECJBJ5BLVDZ',
+      secretAccessKey: '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',
     });
 
     async upPublicFile(databufer: Buffer, filename: string) {
@@ -69,7 +69,7 @@ export class UploadFileS3Service {
         console.log(type);
         
         const infoReturn = Math.floor(Math.random() * 100) + moment(new Date()).format("YYYY-MM-DD-HH:mm:ss")+[...imageMimes].filter(m => m.mime === type)[0].return
-        console.log(infoReturn);
+        console.log('Info',infoReturn);
         
         return infoReturn
           

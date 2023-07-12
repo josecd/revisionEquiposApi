@@ -5,7 +5,7 @@ export class crearImgObservacionDto {
     nombreArchivo?: string;
     tipoArchivo?:string;
     observacionId : number;
-    path:string;
+    path?:string;
 }
 
 

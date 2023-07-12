@@ -27,7 +27,7 @@ export class HotelesController {
     }
 
     @Post()
-    createUser(@Body() newHotal: crearHotelDto){
+    createHotel(@Body() newHotal: crearHotelDto){
         return this._hotel.crearHotel(newHotal);
     }
  

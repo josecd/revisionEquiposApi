@@ -13,6 +13,8 @@ export class FirmasReporte {
     tipo: string
     @Column()
     path: string
+    @Column()
+    nombreFirma: string
     @Column({default: '1'})
     esActivo: string
     @Column({default: '1'})

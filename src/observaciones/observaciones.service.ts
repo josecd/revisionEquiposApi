@@ -98,12 +98,13 @@ export class ObservacionesService {
         HttpStatus.NOT_FOUND,
       );
     } else {
-      console.log(observacion);
       files.forEach(async (element) => {
         const path =
           `${observacion.reporteId}/observacion/` +
           this._up.returnNameDateType(element['mimetype']);
         const imgBucket = await this._up.upPublicFile(element.buffer, path);
+        console.log(imgBucket);
+        
         imgObs.url = imgBucket.Location;
         imgObs.nombreArchivo = imgBucket.Key;
         imgObs.tipoArchivo = element.mimetype;

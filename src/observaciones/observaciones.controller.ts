@@ -52,6 +52,8 @@ export class ObservacionesController {
     @UploadedFiles() files: Array<Express.Multer.File>,
     @Body() imgObs:crearImgObservacionDto,
   ) {
+    console.log('entri');
+    
     return this._observaciones.agregarImagenesObservacion(files,imgObs)
   }
 

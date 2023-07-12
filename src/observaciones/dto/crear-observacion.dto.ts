@@ -7,6 +7,7 @@ export class crearObservacionDto {
     numeroSerie?: string
     area?: string
     reporteId:number;
+    observacion?:string;
 }
 
 

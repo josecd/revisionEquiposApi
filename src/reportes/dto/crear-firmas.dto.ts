@@ -6,6 +6,7 @@ export class crearFirmaDto {
     reporteId?:number;
     nombreArchivo?:string;
     path:string;
+    nombreFirma:string
 }
 
 
