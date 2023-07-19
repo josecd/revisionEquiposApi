@@ -2,16 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import *as fs from "fs";
+import path from 'path';
 async function bootstrap() {
-  const httpsOptions = {
-    key: fs.readFileSync('./secrets/cert.key'),
-    cert: fs.readFileSync('./secrets/cert.crt'),
-  };
+  // const httpsOptions = {
+  //   key: fs.readFileSync(__dirname + '/../1/key.pem'),
+  //   cert: fs.readFileSync(__dirname + '/../1/cert.pem'),
+  // };
   // const app = await NestFactory.create(AppModule, {
   //   httpsOptions,
   // });
   
-  const app = await NestFactory.create(AppModule, { httpsOptions ,cors:true });
+  const app = await NestFactory.create(AppModule, {  cors:true });
   const config = new DocumentBuilder()
   .setTitle('Cats example')
   .setDescription('The cats API description')
@@ -21,8 +22,8 @@ async function bootstrap() {
 const document = SwaggerModule.createDocument(app, config);
 SwaggerModule.setup('swagger', app, document);
 
+// 172.30.121.102
 
-
-  await app.listen(8080,'172.30.121.102');
+  await app.listen(3000,'0.0.0.0');
 }
 bootstrap();
