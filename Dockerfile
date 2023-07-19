@@ -43,27 +43,27 @@
 
  # @@@@@@@@@@@@@@@@@@@@@@
 
-FROM node:18-alpine
+# FROM node:18-alpine
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY package.json yarn.lock ./
-RUN yarn install --production --frozen-lockfile
+# COPY package.json yarn.lock ./
+# RUN yarn install --production --frozen-lockfile
 
-COPY . .
+# COPY . .
 
-RUN yarn add @nestjs/cli
-RUN yarn install && yarn build
+# RUN yarn add @nestjs/cli
+# RUN yarn install && yarn build
 
-# Set environment variables
-ENV NODE_ENV production
-ENV PORT 3000
+# # Set environment variables
+# ENV NODE_ENV production
+# ENV PORT 3000
 
-# Expose port
-EXPOSE $PORT
+# # Expose port
+# EXPOSE $PORT
 
-# Start app
-CMD [ "yarn", "run", "start" ]
+# # Start app
+# CMD [ "yarn", "run", "start" ]
 
 ##@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -73,17 +73,17 @@ CMD [ "yarn", "run", "start" ]
 # BUILD FOR LOCAL DEVELOPMENT
 ###################
 
-# FROM node:18-alpine As development
+FROM node:18-alpine As development
 
-# WORKDIR /usr/src/app
+WORKDIR /usr/src/app
 
-# COPY --chown=node:node package*.json ./
+COPY --chown=node:node package*.json ./
 
-# RUN npm ci
+RUN npm ci
 
-# COPY --chown=node:node . .
+COPY --chown=node:node . .
 
-# USER node
+USER node
 
 ###################
 # BUILD FOR PRODUCTION
