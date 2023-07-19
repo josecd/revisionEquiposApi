@@ -41,7 +41,6 @@
 
 # CMD [ "node", "dist/main.js" ]
 
-dockerfile
 FROM node:18-alpine
 
 WORKDIR /app
