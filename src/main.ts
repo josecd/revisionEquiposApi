@@ -24,6 +24,6 @@ SwaggerModule.setup('swagger', app, document);
 
 // 172.30.121.102
 
-  await app.listen(3000,'0.0.0.0');
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
