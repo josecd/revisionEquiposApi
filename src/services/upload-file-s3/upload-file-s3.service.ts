@@ -2,13 +2,13 @@
 import { Injectable } from '@nestjs/common';
 import { S3 } from 'aws-sdk';
 import * as moment from 'moment';
-
+import * as  process from "process";
 @Injectable()
 export class UploadFileS3Service {
     bucketName = 'imgrevision';
     s3 = new S3({
-      accessKeyId: 'AKIARPMZAECJBJ5BLVDZ',
-      secretAccessKey: '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',
+      accessKeyId: process.env.ACCESKEY,
+      secretAccessKey: process.env.SECRETKEY,
     });
 
     async upPublicFile(databufer: Buffer, filename: string) {
