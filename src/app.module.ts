@@ -13,11 +13,11 @@ import { UploadFileS3Service } from './services/upload-file-s3/upload-file-s3.se
     TypeOrmModule.forRoot(
       {
       type: 'mysql',
-      host:'localhost',
-      port:3306,
+      host:'44.201.101.72',
+      port:33060,
       username:'root',
-      password:'',
-      database:'reportesapi',
+      password:'secret',
+      database:'apirevision',
       entities:[__dirname + '/**/*.entity{.ts,.js}'],
       synchronize:true
     }),
