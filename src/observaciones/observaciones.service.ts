@@ -98,13 +98,11 @@ export class ObservacionesService {
         HttpStatus.NOT_FOUND,
       );
     } else {
-      files.forEach(async (element) => {
-        const path =
-          `${observacion.reporteId}/observacion/` +
-          this._up.returnNameDateType(element['mimetype']);
+
+      await Promise.all(files.map(async (element) => {
+        const path =`${observacion.reporteId}/observacion/` +this._up.returnNameDateType(element['mimetype']);
         const imgBucket = await this._up.upPublicFile(element.buffer, path);
         console.log(imgBucket);
-        
         imgObs.url = imgBucket.Location;
         imgObs.nombreArchivo = imgBucket.Key;
         imgObs.tipoArchivo = element.mimetype;
@@ -113,15 +111,9 @@ export class ObservacionesService {
         const newImgObs = await this.observacionImgRepositorio.create(imgObs);
         const saveImgObs = await this.observacionImgRepositorio.save(newImgObs);
         newImgObs.observacion = observacion;
-        const save = await this.observacionImgRepositorio.save(saveImgObs);
-        console.log('Esto es el save de iamgobs',save);
-        
-        if (save) {
-          return new HttpException('Imagenes agregadas', HttpStatus.ACCEPTED);
-        }else{
-          return new HttpException('Imagenes no agregadas', HttpStatus.NOT_FOUND);
-        }
-      });
+        this.observacionImgRepositorio.save(saveImgObs);
+      }));
+      return await new HttpException('imagenes agregadas', HttpStatus.ACCEPTED);
     }
   }
 
