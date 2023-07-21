@@ -20,11 +20,11 @@ export class ObservacionesService {
     private observacionImgRepositorio: Repository<ObservacionImagen>,
     // private _reporte: ReportesService,
 
-    
-    private _up: UploadFileS3Service,
-    @Inject (forwardRef(()=>ReportesService))private readonly _reporte: ReportesService
 
-  ) {}
+    private _up: UploadFileS3Service,
+    @Inject(forwardRef(() => ReportesService)) private readonly _reporte: ReportesService
+
+  ) { }
 
   async crearObservacion(observacion: crearObservacionDto) {
     const reportFound = await this._reporte.listarReportePorIdSinExecption(
@@ -40,8 +40,8 @@ export class ObservacionesService {
     newObservacion.reporte = reportFound;
     return this.observacionRepositorio.save(saveObservacion);
   }
-  
-  async editarObservacion(id,observacion:editarObservacionDto){
+
+  async editarObservacion(id, observacion: editarObservacionDto) {
     const observacionFound = await this.observacionRepositorio.findOne({
       where: {
         idObservacion: id,
@@ -55,7 +55,7 @@ export class ObservacionesService {
     }
   }
 
-  async eliminarObservacion(id:number){
+  async eliminarObservacion(id: number) {
     const observacionFound = await this.observacionRepositorio.findOne({
       where: {
         idObservacion: id,
@@ -66,16 +66,16 @@ export class ObservacionesService {
       return new HttpException('Observacion no encontrada', HttpStatus.NOT_FOUND);
     } else {
 
-        const queyView = await this.observacionImgRepositorio
+      const queyView = await this.observacionImgRepositorio
         .createQueryBuilder('observacion_imagen')
         .where(`observacion_imagen.observacionId = ${id}`)
         .getMany()
-        const obsObsoleto = await this.observacionImgRepositorio.remove(queyView)
-        obsObsoleto.forEach(async(res)=>{
-          this._up.deleteBucket(res.path);
-        })
-        const result = await this.observacionRepositorio.delete({idObservacion:id});
-        return new HttpException('Se elimino',HttpStatus.ACCEPTED)
+      const obsObsoleto = await this.observacionImgRepositorio.remove(queyView)
+      obsObsoleto.forEach(async (res) => {
+        this._up.deleteBucket(res.path);
+      })
+      const result = await this.observacionRepositorio.delete({ idObservacion: id });
+      return new HttpException('Se elimino', HttpStatus.ACCEPTED)
 
     }
   }
@@ -100,7 +100,7 @@ export class ObservacionesService {
     } else {
 
       await Promise.all(files.map(async (element) => {
-        const path =`${observacion.reporteId}/observacion/` +this._up.returnNameDateType(element['mimetype']);
+        const path = `${observacion.reporteId}/observacion/` + this._up.returnNameDateType(element['mimetype']);
         const imgBucket = await this._up.upPublicFile(element.buffer, path);
         console.log(imgBucket);
         imgObs.url = imgBucket.Location;
@@ -141,7 +141,10 @@ export class ObservacionesService {
       if (res.affected === 0) {
         return new HttpException('observacion no encontrada', HttpStatus.NOT_FOUND);
       } else {
-        return this._up.deleteBucket(path);
+        const dato = await this._up.deleteBucket(path);
+        if (dato) {
+          return new HttpException('imagen borrada', HttpStatus.ACCEPTED);
+        }
       }
     }
   }

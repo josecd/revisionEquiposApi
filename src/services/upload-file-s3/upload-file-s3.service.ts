@@ -65,12 +65,7 @@ export class UploadFileS3Service {
           }
           // You can expand this list @see https://mimesniff.spec.whatwg.org/#matching-an-image-type-pattern
         ];
-
-        console.log(type);
-        
         const infoReturn = Math.floor(Math.random() * 100) + moment(new Date()).format("YYYY-MM-DD-HH:mm:ss")+[...imageMimes].filter(m => m.mime === type)[0].return
-        console.log('Info',infoReturn);
-        
         return infoReturn
           
 
