@@ -26,6 +26,7 @@
   "dependencies": {
     "@awesome-cordova-plugins/screen-orientation": "^6.3.0",
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^3.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^7.1.1",

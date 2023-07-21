@@ -9,15 +9,15 @@ import { AwsSdkModule } from 'nest-aws-sdk';
 import { FirmasReporte } from './entitys/firmas-reporte.entity';
 import { UploadFileS3Service } from 'src/services/upload-file-s3/upload-file-s3.service';
 import { ObservacionesModule } from 'src/observaciones/observaciones.module';
-
+   import { ConfigModule } from '@nestjs/config';
 @Module({
   imports:[
     TypeOrmModule.forFeature([Reportes,FirmasReporte]),
     UsersModule,
     HotelesModule,
     AwsSdkModule,
-    forwardRef(() => ObservacionesModule)
-
+    forwardRef(() => ObservacionesModule),
+    ConfigModule.forRoot(),
   ],
   providers: [ReportesService,UploadFileS3Service],
   controllers: [ReportesController],
