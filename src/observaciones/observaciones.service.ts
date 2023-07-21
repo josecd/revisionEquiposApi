@@ -113,7 +113,7 @@ export class ObservacionesService {
         const newImgObs = await this.observacionImgRepositorio.create(imgObs);
         const saveImgObs = await this.observacionImgRepositorio.save(newImgObs);
         newImgObs.observacion = observacion;
-        const save = this.observacionImgRepositorio.save(saveImgObs);
+        const save = await this.observacionImgRepositorio.save(saveImgObs);
         console.log('Esto es el save de iamgobs',save);
         
         if (save) {
