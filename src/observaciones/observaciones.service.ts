@@ -113,7 +113,14 @@ export class ObservacionesService {
         const newImgObs = await this.observacionImgRepositorio.create(imgObs);
         const saveImgObs = await this.observacionImgRepositorio.save(newImgObs);
         newImgObs.observacion = observacion;
-        return this.observacionImgRepositorio.save(saveImgObs);
+        const save = this.observacionImgRepositorio.save(saveImgObs);
+        console.log('Esto es el save de iamgobs',save);
+        
+        if (save) {
+          return new HttpException('Imagenes agregadas', HttpStatus.ACCEPTED);
+        }else{
+          return new HttpException('Imagenes no agregadas', HttpStatus.NOT_FOUND);
+        }
       });
     }
   }
