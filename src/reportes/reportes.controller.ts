@@ -47,5 +47,10 @@ export class ReportesController {
         return this._reportes.crearFirma(newFirma,file)
     }
 
+    @Post('firmaEliminar')
+    eliminarFirmaDeReporte(@Body() firma: any){
+        return this._reportes.eliminarFirma(firma.idFirmaReporte,firma.path)
+    }
+
     
 }
