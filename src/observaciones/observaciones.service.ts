@@ -27,16 +27,16 @@ export class ObservacionesService {
   ) { }
 
   async crearObservacion(observacion: crearObservacionDto) {
+    
     const reportFound = await this._reporte.listarReportePorIdSinExecption(
       observacion.reporteId,
     );
     if (!reportFound) {
       return new HttpException('Reporte no encontrado', HttpStatus.NOT_FOUND);
     }
+    
     const newObservacion = this.observacionRepositorio.create(observacion);
-    const saveObservacion = await this.observacionRepositorio.save(
-      newObservacion,
-    );
+    const saveObservacion = await this.observacionRepositorio.save(newObservacion);
     newObservacion.reporte = reportFound;
     return this.observacionRepositorio.save(saveObservacion);
   }

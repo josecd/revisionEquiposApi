@@ -30,7 +30,7 @@ export class ObservacionesController {
     private _up: UploadFileS3Service,
   ) {}
 
-  @Post()
+  @Post('crear')
   crearObservacion(@Body() newObservacion: crearObservacionDto) {
     return this._observaciones.crearObservacion(newObservacion);
   }
