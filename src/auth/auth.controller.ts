@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, UseGuards, HttpException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
@@ -13,10 +13,11 @@ export class AuthController {
     return this.authService.create(createAuthDto);
   }
 
+  @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   @Get()
   findAll() {
-    return this.authService.findAll();
+    return new HttpException('Con acceso', HttpStatus.ACCEPTED)
   }
 
   // @UseGuards(AuthGuard)
@@ -40,4 +41,6 @@ export class AuthController {
   signIn(@Body() signInDto: Record<string, any>) {
     return this.authService.signIn(signInDto.correo, signInDto.clave);
   }
+
+
 }
