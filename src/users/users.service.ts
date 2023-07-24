@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable,UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entitiys/user.entity';
 import { Repository } from 'typeorm';
@@ -7,73 +7,73 @@ import { updateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-    
+
 
     constructor(
-        @InjectRepository(User) private userRepositorio:Repository<User>,
-        ){
-        
+        @InjectRepository(User) private userRepositorio: Repository<User>,
+    ) {
+
     }
 
-   async createUser(user:createUserDto){
+    async createUser(user: createUserDto) {
         const userFound = await this.userRepositorio.findOne({
-            where:{
-                correo:user.correo
+            where: {
+                correo: user.correo
             }
         })
 
         if (userFound) {
-            return new HttpException('Usuario ya existe',HttpStatus.CONFLICT)
+            return new HttpException('Usuario ya existe', HttpStatus.CONFLICT)
         }
 
         const newUser = this.userRepositorio.create(user)
         return this.userRepositorio.save(newUser)
     }
 
-    listarUsuario(){
+    listarUsuario() {
         return this.userRepositorio.find({
-            relations:['trabajos']
+            relations: ['trabajos']
         });
     }
-    
-    async listarUsuarioPorID(id: number){
+
+    async listarUsuarioPorID(id: number) {
         console.log('Entro', id);
-        
-        const userFound  = await this.userRepositorio.findOne({
-            where:{
-                idUsuario:id,
+
+        const userFound = await this.userRepositorio.findOne({
+            where: {
+                idUsuario: id,
             },
             // relations:['posts']
 
         })
         console.log(userFound);
-        
+
         if (!userFound) {
-            return new HttpException('Usuario no exontrado',HttpStatus.NOT_FOUND)
-        }else{
+            return new HttpException('Usuario no exontrado', HttpStatus.NOT_FOUND)
+        } else {
             return userFound;
 
         }
     }
 
-    async listarUsuarioPorIdSinException(id: number){
-        const userFound  = await this.userRepositorio.findOne({
-            where:{
-                idUsuario:id,
+    async listarUsuarioPorIdSinException(id: number) {
+        const userFound = await this.userRepositorio.findOne({
+            where: {
+                idUsuario: id,
             },
             // relations:['posts']
 
         })
 
-            return userFound;
-        
+        return userFound;
+
     }
 
-    async eliminarUsuario(id: number){
-        const result =await this.userRepositorio.delete({idUsuario:id});
+    async eliminarUsuario(id: number) {
+        const result = await this.userRepositorio.delete({ idUsuario: id });
         if (result.affected === 0) {
-            return new HttpException('Usuario no exontrado',HttpStatus.NOT_FOUND)
-        }else{
+            return new HttpException('Usuario no exontrado', HttpStatus.NOT_FOUND)
+        } else {
             return result
         }
 
@@ -89,26 +89,45 @@ export class UsersService {
         //     return this.userRepositorio.delete({id});
         // }
 
-        
+
     }
 
-   async updateUsusario(id:number, user:updateUserDto){
-        const userFound  = await this.userRepositorio.findOne({
-            where:{
-                idUsuario:id
+    async updateUsusario(id: number, user: updateUserDto) {
+        const userFound = await this.userRepositorio.findOne({
+            where: {
+                idUsuario: id
             }
         })
         if (!userFound) {
-            return new HttpException('Usuario no exontrado',HttpStatus.NOT_FOUND)
-        }else{
-            const updateUser = Object.assign(userFound,user)
+            return new HttpException('Usuario no exontrado', HttpStatus.NOT_FOUND)
+        } else {
+            const updateUser = Object.assign(userFound, user)
             return this.userRepositorio.save(updateUser)
 
         }
 
-  
+
         // return this.userRepositorio.update({id},user)
 
     }
+
+    async signIn(correo: string, pass: string): Promise<any> {
+        const user = await this.userRepositorio.findOne({
+            where: {
+                correo: correo,
+                clave:pass
+            },
+            // relations:['posts']
+
+        })
+        if (user?.clave !== pass) {
+            throw new UnauthorizedException();
+        }
+        const { clave, ...result } = user;
+        // TODO: Generate a JWT and return it here
+        // instead of the user object
+        return result;
+    }
+
 
 }
