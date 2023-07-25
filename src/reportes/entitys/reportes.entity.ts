@@ -12,6 +12,9 @@ export class Reportes {
     idReporte: number
     @Column()
     recomendaciones: string
+    @Column({nullable:true})
+    descripcion: string
+
     @Column({default: '1'})
     esActivo: string
     @Column({default: '1'})

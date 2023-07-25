@@ -10,19 +10,19 @@ import { ObservacionComentario } from "./observacion-comentario.entity";
 export class Observacion {
     @PrimaryGeneratedColumn()
     idObservacion: number
-    @Column()
+    @Column({nullable:true})
     equipo: string
-    @Column()
+    @Column({nullable:true})
     marca: string
-    @Column()
+    @Column({nullable:true})
     modelo: string
-    @Column()
+    @Column({nullable:true})
     numeroSerie: string
-    @Column()
+    @Column({nullable:true})
     area: string
-    @Column()
+    @Column({nullable:true})
     observacion:string;
-    @Column()
+    @Column({nullable:true})
     criticidad:string; 
     @Column({default: '1'})
     esActivo: string
