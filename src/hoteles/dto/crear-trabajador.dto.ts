@@ -3,7 +3,7 @@
 export class crearTrabajadorDto {
     puesto: string
     hotelId?:number;
-    userlId?:number;
+    userId?:number;
 }
 
 

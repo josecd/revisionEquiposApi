@@ -107,7 +107,7 @@ export class HotelesService {
   }
 
   async crearTrabajador(trabajador: crearTrabajadorDto) {
-    const userFound = await this._user.listarUsuarioPorIdSinException(trabajador.userlId);
+    const userFound = await this._user.listarUsuarioPorIdSinException(trabajador.userId);
     const hotelFound = await this.listarHotelPorIdSinException(trabajador.hotelId);
     if (!userFound) {
         return new HttpException('Usuario no exontrado', HttpStatus.NOT_FOUND);

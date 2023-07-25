@@ -10,6 +10,9 @@ import * as moment from 'moment';
 import { UploadFileS3Service } from 'src/services/upload-file-s3/upload-file-s3.service';
 import { ObservacionImagen } from './entitys/observacion-imagen.entity';
 import { editarObservacionDto } from './dto/editar-observacion.dto';
+import { ObservacionComentario } from './entitys/observacion-comentario.entity';
+import { UsersService } from 'src/users/users.service';
+import { crearComentarioObsDto } from './dto/crear-comentario.dto';
 
 @Injectable()
 export class ObservacionesService {
@@ -18,11 +21,16 @@ export class ObservacionesService {
     private observacionRepositorio: Repository<Observacion>,
     @InjectRepository(ObservacionImagen)
     private observacionImgRepositorio: Repository<ObservacionImagen>,
+
+    @InjectRepository(ObservacionComentario)
+    private observacionComnetaioRepositorio: Repository<ObservacionComentario>,
     // private _reporte: ReportesService,
 
 
     private _up: UploadFileS3Service,
-    @Inject(forwardRef(() => ReportesService)) private readonly _reporte: ReportesService
+    @Inject(forwardRef(() => ReportesService)) private readonly _reporte: ReportesService,
+    private _user: UsersService,
+
 
   ) { }
 
@@ -103,6 +111,10 @@ export class ObservacionesService {
         const path = `${observacion.reporteId}/observacion/` + this._up.returnNameDateType(element['mimetype']);
         const imgBucket = await this._up.upPublicFile(element.buffer, path);
         console.log(imgBucket);
+        const userFound = await this._user.listarUsuarioPorIdSinException(
+          observacion.userId,
+        );
+
         imgObs.url = imgBucket.Location;
         imgObs.nombreArchivo = imgBucket.Key;
         imgObs.tipoArchivo = element.mimetype;
@@ -111,6 +123,7 @@ export class ObservacionesService {
         const newImgObs = await this.observacionImgRepositorio.create(imgObs);
         const saveImgObs = await this.observacionImgRepositorio.save(newImgObs);
         newImgObs.observacion = observacion;
+        newImgObs.user = userFound;
         this.observacionImgRepositorio.save(saveImgObs);
       }));
       return await new HttpException('imagenes agregadas', HttpStatus.ACCEPTED);
@@ -149,5 +162,38 @@ export class ObservacionesService {
     }
   }
 
+  async listarObPorIdTodaLaInfo(id: number) {
+    const obsFound = await this.observacionRepositorio.findOne({
+      where: {
+        idObservacion: id,
+      },
+      relations:['observacionesImagen','observacionesComentario',],
+    })
+
+
+    return obsFound
+  }
+
+  async crearComentario(observacion:crearComentarioObsDto) {
+    
+    const obsFound = await this.observacionRepositorio.findOne({
+      where: {
+        idObservacion:observacion.observacionId,
+      },
+    })
+
+    const userFound = await this._user.listarUsuarioPorIdSinException(
+      observacion.userId,
+    );
+
+    if (!obsFound) {
+      return new HttpException('Observacion no encontrada', HttpStatus.NOT_FOUND);
+    }
+    const newObservacion = this.observacionComnetaioRepositorio.create(observacion);
+    newObservacion.user = userFound;
+    newObservacion.observacion = obsFound;
+    const saveObservacion = await this.observacionComnetaioRepositorio.save(newObservacion);
+    return this.observacionComnetaioRepositorio.save(saveObservacion);
+  }
 
 }

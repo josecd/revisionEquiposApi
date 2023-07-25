@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   ParseIntPipe,
   Patch,
@@ -62,4 +63,16 @@ export class ObservacionesController {
     console.log(imgObs);
       return this._observaciones.eliminarImgObservacion(imgObs.idObservacionImagen,imgObs.path);
   }
+
+  @Get(':id')
+  listarObservacion(@Param('id',ParseIntPipe) id:number){   
+      return this._observaciones.listarObPorIdTodaLaInfo(id);
+  }
+  
+  @Post('agregarComentario')
+  agregarComentario(@Body() comentario){
+    console.log(comentario);
+      return this._observaciones.crearComentario(comentario);
+  }
+
 }

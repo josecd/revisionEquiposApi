@@ -19,7 +19,7 @@ export class TrabajadoresHotel {
     hotelId: number
 
     @Column({nullable:true})
-    userlId: number
+    userId: number
 
     @ManyToOne(()=>Hoteles,user=>user.trabajadores)
     hotel:Hoteles

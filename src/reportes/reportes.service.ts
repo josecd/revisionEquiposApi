@@ -58,7 +58,7 @@ export class ReportesService {
     .leftJoinAndMapMany('observacion.imagenes', ObservacionImagen, 'imagenes', 'imagenes.observacionIdObservacion = observacion.idObservacion')
     .leftJoinAndMapMany('reportes.firmas', FirmasReporte, 'firmasReporte', 'firmasReporte.reporteId = reportes.idReporte ')
     .leftJoinAndMapMany('reportes.hoteles', Hoteles, 'hoteles', 'hoteles.idHotel = reportes.hotelId ')
-    .leftJoinAndMapMany('reportes.usuario', User, 'usuario', 'usuario.idUsuario = reportes.userlId ')
+    .leftJoinAndMapMany('reportes.usuario', User, 'usuario', 'usuario.idUsuario = reportes.userId ')
     .getMany();
     
     
@@ -80,7 +80,7 @@ export class ReportesService {
 
   async crearReporte(reporte: crearReporteDto) {
     const userFound = await this._user.listarUsuarioPorIdSinException(
-      reporte.userlId,
+      reporte.userId,
     );
     const hotelFound = await this._hotel.listarHotelPorIdSinException(
       reporte.hotelId,

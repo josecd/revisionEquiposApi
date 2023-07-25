@@ -23,7 +23,7 @@ export class Reportes {
     hotelId: number
 
     @Column({nullable:true})
-    userlId: number
+    userId: number
 
 
     // @OneToOne(()=>Hoteles)
