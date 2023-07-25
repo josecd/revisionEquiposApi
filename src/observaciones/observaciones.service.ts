@@ -35,14 +35,14 @@ export class ObservacionesService {
   ) { }
 
   async crearObservacion(observacion: crearObservacionDto) {
-    
+
     const reportFound = await this._reporte.listarReportePorIdSinExecption(
       observacion.reporteId,
     );
     if (!reportFound) {
       return new HttpException('Reporte no encontrado', HttpStatus.NOT_FOUND);
     }
-    
+
     const newObservacion = this.observacionRepositorio.create(observacion);
     const saveObservacion = await this.observacionRepositorio.save(newObservacion);
     newObservacion.reporte = reportFound;
@@ -110,7 +110,7 @@ export class ObservacionesService {
       const userFound = await this._user.listarUsuarioPorIdSinException(
         observacion.userId,
       );
-      
+
       await Promise.all(files.map(async (element) => {
         const path = `${observacion.reporteId}/observacion/` + this._up.returnNameDateType(element['mimetype']);
         const imgBucket = await this._up.upPublicFile(element.buffer, path);
@@ -169,18 +169,18 @@ export class ObservacionesService {
       where: {
         idObservacion: id,
       },
-      relations:['observacionesImagen','observacionesComentario',],
+      relations: ['observacionesImagen', 'observacionesImagen.user', 'observacionesComentario', 'observacionesComentario.user'],
     })
 
 
     return obsFound
   }
 
-  async crearComentario(observacion:crearComentarioObsDto) {
-    
+  async crearComentario(observacion: crearComentarioObsDto) {
+
     const obsFound = await this.observacionRepositorio.findOne({
       where: {
-        idObservacion:observacion.observacionId,
+        idObservacion: observacion.observacionId,
       },
     })
 

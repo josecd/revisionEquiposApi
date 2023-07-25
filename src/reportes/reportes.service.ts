@@ -40,10 +40,12 @@ export class ReportesService {
 
   listarReportes() {
     return this.reporteRepositorio.find({
-      relations:['hoteles','usuario']
+      relations:['hoteles','usuario'],
+      order: {fechaRegistro: 'DESC'}
     });
   }
-
+  // ASC
+  // DESC
   async listarReportePorIdTodaLaInfo(id: number) {
     const reporteFound = await this.reporteRepositorio.findOne({
       where: {
@@ -55,6 +57,7 @@ export class ReportesService {
     .createQueryBuilder('reportes')
     .where(`reportes.idReporte = ${id}`)
     .leftJoinAndMapMany('reportes.observaciones', Observacion, 'observacion', 'observacion.reporteIdReporte = reportes.idReporte')
+    .orderBy('reportes.fechaRegistro', 'DESC')
     .leftJoinAndMapMany('observacion.imagenes', ObservacionImagen, 'imagenes', 'imagenes.observacionIdObservacion = observacion.idObservacion')
     .leftJoinAndMapMany('reportes.firmas', FirmasReporte, 'firmasReporte', 'firmasReporte.reporteId = reportes.idReporte ')
     .leftJoinAndMapMany('reportes.hoteles', Hoteles, 'hoteles', 'hoteles.idHotel = reportes.hotelId ')
