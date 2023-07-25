@@ -107,13 +107,15 @@ export class ObservacionesService {
       );
     } else {
 
+      const userFound = await this._user.listarUsuarioPorIdSinException(
+        observacion.userId,
+      );
+      
       await Promise.all(files.map(async (element) => {
         const path = `${observacion.reporteId}/observacion/` + this._up.returnNameDateType(element['mimetype']);
         const imgBucket = await this._up.upPublicFile(element.buffer, path);
         console.log(imgBucket);
-        const userFound = await this._user.listarUsuarioPorIdSinException(
-          observacion.userId,
-        );
+
 
         imgObs.url = imgBucket.Location;
         imgObs.nombreArchivo = imgBucket.Key;
