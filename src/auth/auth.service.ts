@@ -14,27 +14,7 @@ export class AuthService {
     ){
 
   }
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
 
-  findAll() {
-    return this.userRepositorio.find({
-      relations: ['trabajos']
-  });
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
 
   async signIn(correo: string, pass: string): Promise<any> {
     
@@ -53,6 +33,11 @@ export class AuthService {
     const payload = { sub: user.idUsuario, username: user.correo };
     return {
       access_token: await this.jwtService.signAsync(payload),
+      user :{
+        idUsuario:user.idUsuario,
+        nombre:user.nombre,
+        correo:user.correo
+      }
     };
 
     return result;
