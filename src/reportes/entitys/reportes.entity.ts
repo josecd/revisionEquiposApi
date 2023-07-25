@@ -10,7 +10,7 @@ import { Entity,Column,PrimaryGeneratedColumn,
 export class Reportes {
     @PrimaryGeneratedColumn()
     idReporte: number
-    @Column()
+    @Column({nullable:true})
     recomendaciones: string
     @Column({nullable:true})
     descripcion: string
