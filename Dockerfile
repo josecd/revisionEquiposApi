@@ -113,6 +113,10 @@ RUN npm install chromium
 
 RUN node node_modules/puppeteer/install.js
 
+RUN sudo apt install chromium
+
+RUN whereis chromium-browser
+
 USER node
 
 ###################
