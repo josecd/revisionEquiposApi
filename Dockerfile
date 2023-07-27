@@ -107,7 +107,7 @@ ENV NODE_ENV production
 
 RUN npm ci --only=production && npm cache clean --force
 
-RUN npm install puppeteer  --unsafe-perm --allow-root
+# RUN npm install puppeteer  --unsafe-perm --allow-root
   
 
 USER node
@@ -121,5 +121,5 @@ FROM node:18-alpine As production
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/templates ./templates
-RUN node node_modules/puppeteer/install.js
+# RUN node node_modules/puppeteer/install.js
 CMD [ "node", "dist/main.js" ]
