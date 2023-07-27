@@ -36,16 +36,17 @@
     "aws-sdk": "^2.1390.0",
     "bcrypt": "^5.1.0",
     "cordova-plugin-screen-orientation": "^3.0.3",
+    "fs-extra": "^11.1.0",
+    "handlebars": "^4.7.7",
     "moment": "^2.29.4",
     "mysql2": "^3.3.3",
     "nest-aws-sdk": "^3.0.1",
     "passport-jwt": "^4.0.1",
+    "puppeteer": "^13.5.0",
+    "puppeteer-extra": "^3.3.6",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
-    "typeorm": "^0.3.16",
-    "puppeteer": "^13.5.0",
-    "fs-extra": "^11.1.0",
-    "handlebars": "^4.7.7"
+    "typeorm": "^0.3.16"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
