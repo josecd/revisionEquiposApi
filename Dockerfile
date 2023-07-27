@@ -90,7 +90,7 @@ USER node
 ###################
 
 FROM node:18-alpine As build
-
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 WORKDIR /usr/src/app
 
 COPY --chown=node:node package*.json ./
@@ -107,6 +107,12 @@ ENV NODE_ENV production
 
 RUN npm ci --only=production && npm cache clean --force
 
+RUN npm install puppeteer --unsafe-perm
+
+RUN CHROME_DRIVER_VERSION=`curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
+    wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip && \
+    unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+RUN node node_modules/puppeteer/install.js
 USER node
 
 ###################
@@ -118,5 +124,5 @@ FROM node:18-alpine As production
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/templates ./templates
-
+RUN node node_modules/puppeteer/install.js
 CMD [ "node", "dist/main.js" ]
