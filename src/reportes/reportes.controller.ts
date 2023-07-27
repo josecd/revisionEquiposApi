@@ -104,5 +104,17 @@ export class ReportesController {
         // res.end(buffer);
     }
 
-
+    @Get("pdf/download")
+    async downloadPDF(@Res() res): Promise<void> {
+      const buffer = await this._reportes.generarPDF();
+  
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': 'attachment; filename=example.pdf',
+        'Content-Length': buffer.length,
+      })
+  
+      res.end(buffer);
+    }
+  
 }
