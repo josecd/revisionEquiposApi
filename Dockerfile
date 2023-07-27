@@ -82,7 +82,7 @@ COPY --chown=node:node package*.json ./
 RUN npm ci
 
 COPY --chown=node:node . .
-
+RUN npm install -g puppeteer --unsafe-perm=true --allow-root
 USER node
 
 ###################
@@ -92,7 +92,7 @@ USER node
 FROM node:18-alpine As build
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 WORKDIR /usr/src/app
-
+RUN npm install -g puppeteer --unsafe-perm=true --allow-root
 COPY --chown=node:node package*.json ./
 
 COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
@@ -181,8 +181,8 @@ RUN apk add --no-cache \
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 # Puppeteer v13.5.0 works with Chromium 100.
-RUN yarn add puppeteer@13.5.0
-
+# RUN yarn add puppeteer@13.5.0
+RUN npm install -g puppeteer --unsafe-perm=true --allow-root
 # Add user so we don't need --no-sandbox.
 RUN addgroup -S pptruser && adduser -S -G pptruser pptruser \
     && mkdir -p /home/pptruser/Downloads /app \
