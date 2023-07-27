@@ -14,6 +14,8 @@ import { ObservacionComentario } from './entitys/observacion-comentario.entity';
 import { UsersService } from 'src/users/users.service';
 import { crearComentarioObsDto } from './dto/crear-comentario.dto';
 
+import { createPdf } from '@saemhco/nestjs-html-pdf';
+import * as path from 'path';
 @Injectable()
 export class ObservacionesService {
   constructor(
@@ -197,5 +199,20 @@ export class ObservacionesService {
     const saveObservacion = await this.observacionComnetaioRepositorio.save(newObservacion);
     return this.observacionComnetaioRepositorio.save(saveObservacion);
   }
+ 
+  firstExample() {
+    const filePath = path.join(process.cwd(), 'templates', './pdf-profile.html');
+    // const filePath = path.join(process.cwd(), 'templates', './index.html');
+
+    return createPdf(filePath);
+  }
+
+ 
+
+  pdfReporte(){
+
+  }
+
+  
 
 }

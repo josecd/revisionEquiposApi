@@ -32,6 +32,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^7.1.1",
     "@nestjs/typeorm": "^9.0.1",
+    "@saemhco/nestjs-html-pdf": "^0.1.0",
     "aws-sdk": "^2.1390.0",
     "bcrypt": "^5.1.0",
     "cordova-plugin-screen-orientation": "^3.0.3",

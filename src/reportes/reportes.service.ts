@@ -16,6 +16,10 @@ import * as moment from "moment";
 import { ObservacionesService } from 'src/observaciones/observaciones.service';
 import { Hoteles } from 'src/hoteles/entitys/hotel.entity';
 import { User } from 'src/users/entitiys/user.entity';
+import { ObservacionComentario } from 'src/observaciones/entitys/observacion-comentario.entity';
+
+import { createPdf } from '@saemhco/nestjs-html-pdf';
+import * as path from 'path';
 @Injectable()
 export class ReportesService {
 
@@ -59,6 +63,7 @@ export class ReportesService {
     .leftJoinAndMapMany('reportes.observaciones', Observacion, 'observacion', 'observacion.reporteIdReporte = reportes.idReporte')
     .orderBy('reportes.fechaRegistro', 'DESC')
     .leftJoinAndMapMany('observacion.imagenes', ObservacionImagen, 'imagenes', 'imagenes.observacionIdObservacion = observacion.idObservacion')
+    .leftJoinAndMapMany('observacion.comentarios', ObservacionComentario, 'comentarios', 'comentarios.observacionIdObservacion = observacion.idObservacion')
     .leftJoinAndMapMany('reportes.firmas', FirmasReporte, 'firmasReporte', 'firmasReporte.reporteId = reportes.idReporte ')
     .leftJoinAndMapMany('reportes.hoteles', Hoteles, 'hoteles', 'hoteles.idHotel = reportes.hotelId ')
     .leftJoinAndMapMany('reportes.usuario', User, 'usuario', 'usuario.idUsuario = reportes.userId ')
@@ -199,6 +204,41 @@ export class ReportesService {
         return this._up.deleteBucket(path);
       }
     }
+  }
+
+  secondExample(info:any) {
+    const data = info;
+    const options = {
+      format: 'Tabloid',
+      displayHeaderFooter: true,
+      // margin: {
+      //   left: '10mm',
+      //   top: '25mm',
+      //   right: '10mm',
+      //   bottom: '15mm',
+      // },
+      // landscape: true,
+    // headerTemplate: `                    <div style="width: 100%; text-align: center;">
+    // <span style="font-size: 20px;">
+    //     <div class="col-1">
+    //         <img class="me-3"
+    //             src="https://d1.awsstatic.com/case-studies/PALACE-RESORTS.e292f526b6499fbee5de1bfd7430fda18e7c913a.png"
+    //             alt="" width="48" height="38">
+
+    //     </div>
+    //     <div class="col-11" style="text-align: center;">
+    //         <div class="lh-1">
+    //             <h1 class="h6 mb-0 text-black lh-1">CORPORATIVO MANTENIMIENTO DE COCINAS
+    //             </h1>
+    //             <small>REVISIÓN DE EQUIPOS</small>
+    //         </div>
+    //     </div>
+
+    //     </div>`, 
+    
+    }; 
+    const filePath = path.join(process.cwd(), 'templates', 'pdf.html');;
+    return createPdf(filePath, options, data);
   }
 
 }
