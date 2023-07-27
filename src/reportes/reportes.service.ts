@@ -279,7 +279,7 @@ export class ReportesService {
     // we are using headless mode
     const browser = await puppeteer.launch(
       {
-        executablePath: './node_modules/chromium/lib/chromium/chrome-linux/chrome',
+        executablePath: '/usr/bin/chromium-browser'
 
       }
     );
