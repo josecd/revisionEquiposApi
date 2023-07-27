@@ -107,7 +107,7 @@ ENV NODE_ENV production
 
 RUN npm ci --only=production && npm cache clean --force
 
-RUN npm install puppeteer --save-dev  --unsafe-perm=true --allow-root
+RUN npm install puppeteer --save-dev  --unsafe-perm --allow-root
   
 RUN node node_modules/puppeteer/install.js
 USER node
