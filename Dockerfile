@@ -105,93 +105,22 @@ RUN npm run build
 
 ENV NODE_ENV production
 
+
+# We don't need the standalone Chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+
+# Install Google Chrome Stable and fonts
+# Note: this installs the necessary libs to make the browser work with Puppeteer.
+RUN apt-get update && apt-get install gnupg wget -y && \
+  wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
+  sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
+  apt-get update && \
+  apt-get install google-chrome-stable -y --no-install-recommends && \
+  rm -rf /var/lib/apt/lists/*
+
 RUN npm ci --only=production && npm cache clean --force
 
-# RUN npm install puppeteer
-
-# RUN npm install chromium
-
-# RUN node node_modules/puppeteer/install.js
-
-
-# RUN apk add --no-cache \
-#     msttcorefonts-installer font-noto fontconfig \
-#     freetype ttf-dejavu ttf-droid ttf-freefont ttf-liberation \
-#     chromium \
-#   && rm -rf /var/cache/apk/* /tmp/*
-
-# RUN update-ms-fonts \
-#     && fc-cache -f
-
-# ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-# ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
-
-# WORKDIR /app
-
-# RUN npm init -y &&  \
-#     npm i puppeteer express
-
-# RUN addgroup pptruser \
-#     && adduser pptruser -D -G pptruser \
-#     && mkdir -p /home/pptruser/Downloads \
-#     && chown -R pptruser:pptruser /home/pptruser \
-#     && chown -R pptruser:pptruser /app
-
-# Installs latest Chromium (100) package.
-# RUN apk add --no-cache \
-#       chromium \
-#       nss \
-#       freetype \
-#       harfbuzz \
-#       ca-certificates \
-#       ttf-freefont \
-#       nodejs \
-#       yarn
-
-
-# Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
-# ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
-
-# Puppeteer v13.5.0 works with Chromium 100.
-# RUN yarn add puppeteer@13.5.0
-
-# Add user so we don't need --no-sandbox.
-# RUN addgroup -S pptruser && adduser -S -G pptruser pptruser \
-#     && mkdir -p /home/pptruser/Downloads /app \
-#     && chown -R pptruser:pptruser /home/pptruser \
-#     && chown -R pptruser:pptruser /app
-
-RUN apt-get update && apt-get install -y wget gnupg && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && apt-get update && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 --no-install-recommends && rm -rf /var/lib/apt/lists/*
-
 USER node
-
-FROM alpine
-
-# Installs latest Chromium (100) package.
-RUN apk add --no-cache \
-      chromium \
-      nss \
-      freetype \
-      harfbuzz \
-      ca-certificates \
-      ttf-freefont \
-      nodejs \
-      yarn
-
-# Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
-
-# Puppeteer v13.5.0 works with Chromium 100.
-# RUN yarn add puppeteer@13.5.0
-RUN npm install -g puppeteer --unsafe-perm=true --allow-root
-# Add user so we don't need --no-sandbox.
-RUN addgroup -S pptruser && adduser -S -G pptruser pptruser \
-    && mkdir -p /home/pptruser/Downloads /app \
-    && chown -R pptruser:pptruser /home/pptruser \
-    && chown -R pptruser:pptruser /app
-
-# Run everything after as non-privileged user.
-USER pptruser
 
 ###################
 # PRODUCTION
