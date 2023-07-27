@@ -111,6 +111,8 @@ RUN npm install puppeteer
 
 RUN npm install chromium
 
+RUN node node_modules/puppeteer/install.js
+
 USER node
 
 ###################
@@ -122,5 +124,5 @@ FROM node:18-alpine As production
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/templates ./templates
-# RUN node node_modules/puppeteer/install.js
+RUN node node_modules/puppeteer/install.js
 CMD [ "node", "dist/main.js" ]
