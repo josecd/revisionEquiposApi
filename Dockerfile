@@ -107,8 +107,9 @@ ENV NODE_ENV production
 
 RUN npm ci --only=production && npm cache clean --force
 
-# RUN npm install puppeteer  --unsafe-perm --allow-root
-  
+RUN npm install puppeteer
+
+RUN npm install chromium
 
 USER node
 
