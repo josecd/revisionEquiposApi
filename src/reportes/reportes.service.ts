@@ -236,8 +236,8 @@ export class ReportesService {
 
     //     </div>`, 
     
-    }; 
-    const filePath = path.join(process.cwd(), './src/reportes/pdf.html');;
+    };  
+    const filePath = path.join(process.cwd(), './templates/pdf.html');;
     console.log('file',filePath);
     
     return createPdf(filePath, options, data);

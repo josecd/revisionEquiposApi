@@ -97,6 +97,8 @@ COPY --chown=node:node package*.json ./
 
 COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
 
+COPY --chown=node:node --from=development /usr/src/app/templates ./templates
+
 COPY --chown=node:node . .
 
 RUN npm run build
