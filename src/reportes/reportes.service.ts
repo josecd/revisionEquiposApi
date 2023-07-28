@@ -282,7 +282,12 @@ export class ReportesService {
     // we are using headless mode
     const browser = await puppeteer.launch(
       {
-        executablePath: '/usr/bin/chromium-browser'
+        headless: true,
+        executablePath: '/usr/bin/google-chrome',
+        args: [
+            "--no-sandbox",
+            "--disable-gpu",
+        ]
       }
     );
     const page = await browser.newPage()
