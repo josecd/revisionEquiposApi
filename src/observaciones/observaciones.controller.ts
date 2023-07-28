@@ -66,10 +66,10 @@ export class ObservacionesController {
     return this._observaciones.eliminarImgObservacion(imgObs.idObservacionImagen, imgObs.path);
   }
 
-  // @Get(':id')
-  // listarObservacion(@Param('id',ParseIntPipe) id:number){   
-  //     return this._observaciones.listarObPorIdTodaLaInfo(id);
-  // }
+  @Get(':id')
+  listarObservacion(@Param('id',ParseIntPipe) id:number){   
+      return this._observaciones.listarObPorIdTodaLaInfo(id);
+  }
 
   @Post('agregarComentario')
   agregarComentario(@Body() comentario) {
@@ -77,30 +77,30 @@ export class ObservacionesController {
     return this._observaciones.crearComentario(comentario);
   }
 
-  @Get('indo')
-  listarReportes() {
-    console.log('ind');
+  // @Get('indo')
+  // listarReportes() {
+  //   console.log('ind');
 
-    return new HttpException('Reporte no exontrado', HttpStatus.NOT_FOUND);
-  }
+  //   return new HttpException('Reporte no exontrado', HttpStatus.NOT_FOUND);
+  // }
 
-  @Get('pdf')
-  async generatePdf(@Res() res) {
-    const buffer = await this._observaciones.firstExample();
-    console.log(buffer);
+  // @Get('pdf')
+  // async generatePdf(@Res() res) {
+  //   const buffer = await this._observaciones.firstExample();
+  //   console.log(buffer);
 
-    res.set({
-      // pdf
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename=pdf.pdf`,
-      'Content-Length': buffer.length,
-      // prevent cache
-      'Cache-Control': 'no-cache, no-store, must-revalidate',
-      Pragma: 'no-cache',
-      Expires: 0,
-    });
-    res.end(buffer);
-  }
+  //   res.set({
+  //     // pdf
+  //     'Content-Type': 'application/pdf',
+  //     'Content-Disposition': `attachment; filename=pdf.pdf`,
+  //     'Content-Length': buffer.length,
+  //     // prevent cache
+  //     'Cache-Control': 'no-cache, no-store, must-revalidate',
+  //     Pragma: 'no-cache',
+  //     Expires: 0,
+  //   });
+  //   res.end(buffer);
+  // }
 
 
 }
