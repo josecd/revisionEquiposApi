@@ -1,9 +1,12 @@
-import { HttpException, HttpStatus, Injectable,UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entitiys/user.entity';
 import { Repository } from 'typeorm';
 import { createUserDto } from './dto/create-user.dto';
 import { updateUserDto } from './dto/update-user.dto';
+import { Perfil } from './entitiys/perfil.entity';
+import { createPerfilDto } from './dto/create-perfil.dto';
+import { UploadFileS3Service } from 'src/services/upload-file-s3/upload-file-s3.service';
 
 @Injectable()
 export class UsersService {
@@ -11,6 +14,8 @@ export class UsersService {
 
     constructor(
         @InjectRepository(User) private userRepositorio: Repository<User>,
+        @InjectRepository(Perfil) private userPerfil: Repository<Perfil>,
+        private _up: UploadFileS3Service
     ) {
 
     }
@@ -37,6 +42,23 @@ export class UsersService {
     }
 
     async listarUsuarioPorID(id: number) {
+        const userFound = await this.userPerfil.findOne({
+            where: {
+                idUsuarioPerfil: id,
+            },
+            // relations:['posts']
+
+        })
+        console.log(userFound);
+
+        if (!userFound) {
+            return new HttpException('Perfil no exontrado', HttpStatus.NOT_FOUND)
+        } else {
+            return userFound;
+        }
+    }
+
+    async listarPerfiloPorID(id: number) {
         console.log('Entro', id);
 
         const userFound = await this.userRepositorio.findOne({
@@ -55,6 +77,7 @@ export class UsersService {
 
         }
     }
+
 
     async listarUsuarioPorIdSinException(id: number) {
         const userFound = await this.userRepositorio.findOne({
@@ -105,8 +128,6 @@ export class UsersService {
             return this.userRepositorio.save(updateUser)
 
         }
-
-
         // return this.userRepositorio.update({id},user)
 
     }
@@ -115,7 +136,7 @@ export class UsersService {
         const user = await this.userRepositorio.findOne({
             where: {
                 correo: correo,
-                clave:pass
+                clave: pass
             },
             // relations:['posts']
 
@@ -129,5 +150,52 @@ export class UsersService {
         return result;
     }
 
+
+    async createFirmaUsuario(id: number, pefil: createPerfilDto, file) {
+        const userFound = await this.userRepositorio.findOne({
+            where: {
+                idUsuario: id
+            }
+        })
+
+        if (!userFound) {
+            return new HttpException('Usuario no encontrado existe', HttpStatus.CONFLICT)
+        }
+        console.log('datos');
+
+        console.log('files', file.mimetype);
+
+        const path = `firmas/${id}/observacion/` + this._up.returnNameDateType(file['mimetype']);
+        const imgBucket = await this._up.upPublicFile(file.buffer, path);
+
+        pefil.url = imgBucket.Location;
+        pefil.nombreArchivo = imgBucket.Key;
+        pefil.tipoArchivo = file.mimetype;
+        pefil.path = path;
+
+        const newUser =await  this.userPerfil.create(pefil)
+        const d = await this.userPerfil.save(newUser)
+        return await this.userRepositorio.update({
+           idUsuario:id,
+          }, {
+            perfil:newUser
+          });
+
+        
+        this.userPerfil.save( d)
+
+
+        // const newImgObs = await this.observacionImgRepositorio.create(imgObs);
+        // const saveImgObs = await this.observacionImgRepositorio.save(newImgObs);
+        // newImgObs.observacion = observacion;
+        // newImgObs.user = userFound;
+        // this.observacionImgRepositorio.save(saveImgObs);
+        return  await new HttpException('Informacion cargad', HttpStatus.ACCEPTED);
+
+
+        // const newUser = this.userPerfil.create(pefil)
+        // userFound.perfil = newUser;
+        // return this.userPerfil.save(newUser)
+    }
 
 }

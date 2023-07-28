@@ -54,16 +54,16 @@ export class ReportesController {
 
     @Get(':id/pdf2')
     async generatePdf2(@Res() res, @Param('id', ParseIntPipe) id: number) {
-        console.log('id_',id);
-        
+        console.log('id_', id);
+
         const data = await this._reportes.listarReportePorIdTodaLaInfo(id);
         console.log(data[0]['descripcion']);
-        
+
         const buffer = await this._reportes.secondExample(data[0]);
         console.log(buffer);
         const base64String = btoa(String.fromCharCode(...new Uint8Array(buffer.data)));
-        console.log('BASE64',base64String);
-        
+        console.log('BASE64', base64String);
+
         res.set({
             // pdf
             'Content-Type': 'application/pdf',
@@ -74,22 +74,22 @@ export class ReportesController {
             Pragma: 'no-cache',
             Expires: 0,
         });
-        
+
         res.end(buffer);
     }
 
     @Get(':id/pdf3')
     async generatePdf3(@Res() res, @Param('id', ParseIntPipe) id: number) {
-        console.log('id_',id);
-        
+        console.log('id_', id);
+
         const data = await this._reportes.listarReportePorIdTodaLaInfo(id);
         console.log(data[0]['descripcion']);
-        
+
         const buffer = await this._reportes.generatePdf(data[0])
         console.log(buffer);
         // const base64String = btoa(String.fromCharCode(...new Uint8Array(buffer.data)));
         // console.log('BASE64',base64String);
-        
+
         // res.set({
         //     // pdf
         //     'Content-Type': 'application/pdf',
@@ -100,32 +100,28 @@ export class ReportesController {
         //     Pragma: 'no-cache',
         //     Expires: 0,
         // });
-        
+
         // res.end(buffer);
     }
 
     @Get("pdf/download")
     async downloadPDF(@Res() res): Promise<void> {
-      const buffer = await this._reportes.generarPDF();
-  
-      res.set({
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename=example.pdf',
-        'Content-Length': buffer.length,
-      })
-  
-      res.end(buffer);
+        const buffer = await this._reportes.generarPDF();
+
+        res.set({
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': 'attachment; filename=example.pdf',
+            'Content-Length': buffer.length,
+        })
+
+        res.end(buffer);
     }
-  
+
     @Get('pdf/view/:id')
     @Render('pdf.hbs')
-    async root( @Param('id', ParseIntPipe) id: number) {
-        console.log('Test');
+    async root(@Param('id', ParseIntPipe) id: number) {
         const data = await this._reportes.listarReportePorIdTodaLaInfo(id);
-        
         const informacion = data[0]
-        console.log(informacion);
-        
-      return  informacion ;
+        return informacion;
     }
 }
