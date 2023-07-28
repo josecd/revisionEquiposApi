@@ -203,7 +203,8 @@ export class ObservacionesService {
   firstExample() {
     const filePath = path.join(process.cwd(), 'templates', './pdf-profile.html');
     // const filePath = path.join(process.cwd(), 'templates', './index.html');
-
+    console.log('path',filePath);
+    
     return createPdf(filePath);
   }
 

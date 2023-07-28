@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Render, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { ReportesService } from './reportes.service';
 import { crearReporteDto } from './dto/crear-reporte.dto';
 import { editarReporteDto } from './dto/editar-reporte.dto';
@@ -86,7 +86,7 @@ export class ReportesController {
         console.log(data[0]['descripcion']);
         
         const buffer = await this._reportes.generatePdf(data[0])
-        // console.log(buffer);
+        console.log(buffer);
         // const base64String = btoa(String.fromCharCode(...new Uint8Array(buffer.data)));
         // console.log('BASE64',base64String);
         
@@ -117,4 +117,11 @@ export class ReportesController {
       res.end(buffer);
     }
   
+    @Get('pdf/view')
+    @Render('pdf.hbs')
+    root() {
+        console.log('Test');
+        
+      return { message: 'Hello world!' };
+    }
 }
