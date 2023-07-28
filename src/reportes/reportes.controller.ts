@@ -117,11 +117,15 @@ export class ReportesController {
       res.end(buffer);
     }
   
-    @Get('pdf/view')
+    @Get('pdf/view/:id')
     @Render('pdf.hbs')
-    root() {
+    async root( @Param('id', ParseIntPipe) id: number) {
         console.log('Test');
+        const data = await this._reportes.listarReportePorIdTodaLaInfo(id);
         
-      return { message: 'Hello world!' };
+        const informacion = data[0]
+        console.log(informacion);
+        
+      return  informacion ;
     }
 }
