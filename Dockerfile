@@ -63,7 +63,7 @@ ENV PORT 3000
 EXPOSE $PORT
 
 # Start app
-CMD [ "yarn", "run", "start" ]
+CMD [ "yarn", "run", "start:dev" ]
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@
 
