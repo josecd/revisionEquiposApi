@@ -372,7 +372,17 @@ export class ReportesService {
 
   createPdf = async (filePath: string, options = {}, data = {}) => {
     try {
-      const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch(
+        {
+          headless: 'new',
+          executablePath: process.env.CHROMIUM_PATH,
+          args: ['--no-sandbox',
+            '--disable-setuid-sandbox',
+            "--headless=new"
+          ],
+            
+        }
+      );
       if (browser) await browser.close()
       const page = await browser.newPage();
 
@@ -422,8 +432,8 @@ export class ReportesService {
           return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
         }
       });
-
-      const html = await fs.readFile(filePath, 'utf8');
+      
+      const html = await fs.readFileSync(filePath, 'utf-8');
       const content = hbs.compile(html)(data);
       await page.setContent(content);
 
@@ -446,5 +456,51 @@ export class ReportesService {
       console.log(e);
     }
   };
+
+
+  async generatepdfHtml(info:any) {
+    // Create a browser instance
+    const browser = await puppeteer.launch({
+      headless: 'new',
+      executablePath: process.env.CHROMIUM_PATH,
+      args: ['--no-sandbox',
+        '--disable-setuid-sandbox',
+        "--headless=new"
+      ],
+        
+    });
+
+    // Create a new page
+    const page = await browser.newPage();
+    const filePath = path.join(process.cwd(), 'templates', 'pdf.hbs');;
+    const html = await fs.readFileSync(filePath, 'utf-8');
+    const content = hbs.compile(html)(info);
+    await page.setContent(content);
+    const buffer = await page.pdf({
+      // path: 'output-abc.pdf',
+      printBackground: true,
+      margin: {
+        left: '10mm',
+        top: '10mm',
+        right: '10mm',
+        bottom: '10mm',
+      },
+      format: 'Tabloid',
+    });
+
+    // Downlaod the PDF
+    const pdf = await page.pdf({
+      path: 'result.pdf',
+      margin: { top: '100px', right: '50px', bottom: '100px', left: '50px' },
+      printBackground: true,
+      format: 'A4',
+    });
+
+    await browser.close();
+    return buffer;
+    process.exit();
+
+  }
+
 
 }
