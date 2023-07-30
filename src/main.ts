@@ -6,6 +6,7 @@ import path from 'path';
 import * as  process from "process";
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+
 async function bootstrap() {
   // const httpsOptions = {
   //   key: fs.readFileSync(__dirname + '/../1/key.pem'),
@@ -20,6 +21,11 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'templates'));
   app.setViewEngine('hbs');
 
+  module.exports = {
+    // Changes the cache location for Puppeteer.
+    cacheDirectory: join(__dirname, '.cache', 'puppeteer'),
+  };
+  
   const config = new DocumentBuilder()
     .setTitle('Cats example')
     .setDescription('The cats API description')
