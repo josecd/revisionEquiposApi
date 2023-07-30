@@ -306,9 +306,12 @@ export class ReportesService {
   async generatepdf33() {
     // Create a browser instance
     const browser = await puppeteer.launch({
-
+      headless: 'new',
       args: ['--no-sandbox',
-        '--disable-setuid-sandbox'],
+        '--disable-setuid-sandbox',
+        "--headless=new"
+      ],
+        
     });
 
     // Create a new page
