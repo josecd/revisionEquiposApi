@@ -79,7 +79,7 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node package*.json ./
 
-RUN npm i
+RUN npm ci
 RUN npm uninstall puppeteer
 RUN npm install puppeteer
 
@@ -109,7 +109,7 @@ RUN npm run build
 
 ENV NODE_ENV production
 
-RUN npm i --only=production && npm cache clean --force
+RUN npm ci --only=production && npm cache clean --force
 
 RUN npm uninstall puppeteer
 RUN npm install puppeteer
