@@ -79,9 +79,15 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node package*.json ./
 
-RUN npm ci
+RUN npm i
+RUN npm uninstall puppeteer
+RUN npm install puppeteer
 
 COPY --chown=node:node . .
+
+RUN apk add --no-cache udev ttf-freefont chromium git
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
 USER node
 
@@ -103,16 +109,13 @@ RUN npm run build
 
 ENV NODE_ENV production
 
-RUN npm ci --only=production && npm cache clean --force
+RUN npm i --only=production && npm cache clean --force
 
 RUN npm uninstall puppeteer
-
 RUN npm install puppeteer
 
 RUN apk add --no-cache udev ttf-freefont chromium git
-
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-
 ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
 USER node
@@ -126,5 +129,9 @@ FROM node:18-alpine As production
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/templates ./templates
+
+RUN apk add --no-cache udev ttf-freefont chromium git
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
 CMD [ "node", "dist/main.js" ]
