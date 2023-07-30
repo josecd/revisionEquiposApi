@@ -339,7 +339,7 @@ export class ReportesService {
             {
               size: "LETTER",
               bufferPages: true
-            })
+            }) 
   
             //todo
             doc.text("PDF Generado en nuestro servidor");
