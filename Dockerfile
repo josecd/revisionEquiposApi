@@ -135,6 +135,6 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
 # test
-ENTRYPOINT ["dumb-init", "--"]
+# ENTRYPOINT ["dumb-init", "--"]
 
 CMD [ "node", "dist/main.js" ]
