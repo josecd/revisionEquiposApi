@@ -124,4 +124,30 @@ export class ReportesController {
         const informacion = data[0]
         return informacion;
     }
+
+    @Get('pdf/view2/:id')
+    @Render('pdf.hbs')
+    async root2(@Param('id', ParseIntPipe) id: number) {
+        const data = await this._reportes.generatepdf33();
+    
+    }
+
+    @Get(':id/pdf6')
+    async generatePdf6(@Res() res, @Param('id', ParseIntPipe) id: number) {
+
+        const buffer = await this._reportes.generatepdf33();
+
+        res.set({
+            // pdf
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': `attachment; filename=pdf.pdf`,
+            'Content-Length': buffer.length,
+            // prevent cache
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            Pragma: 'no-cache',
+            Expires: 0,
+        });
+
+        res.end(buffer);
+    }
 }

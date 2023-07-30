@@ -14,7 +14,6 @@ import { ObservacionComentario } from './entitys/observacion-comentario.entity';
 import { UsersService } from 'src/users/users.service';
 import { crearComentarioObsDto } from './dto/crear-comentario.dto';
 
-import { createPdf } from '@saemhco/nestjs-html-pdf';
 import * as path from 'path';
 @Injectable()
 export class ObservacionesService {
@@ -201,11 +200,11 @@ export class ObservacionesService {
   }
  
   firstExample() {
-    const filePath = path.join(process.cwd(), 'templates', './pdf-profile.html');
-    // const filePath = path.join(process.cwd(), 'templates', './index.html');
-    console.log('path',filePath);
+    // const filePath = path.join(process.cwd(), 'templates', './pdf-profile.html');
+    // // const filePath = path.join(process.cwd(), 'templates', './index.html');
+    // console.log('path',filePath);
     
-    return createPdf(filePath);
+    // return createPdf(filePath);
   }
 
  

@@ -11,6 +11,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.4/jspdf.plugin.autotable.min.js"></script>
+
+
+
+            {{!-- -----  --}}
+
+                <script src="https://unpkg.com/pdf-lib"></script>
     <script>
         function getPDF() {
             var doc = new jsPDF();
@@ -61,7 +67,7 @@
                     'elementHandlers': specialElementHandlers
                 }
             );
-
+            doc.co
             setTimeout(function () {
                 doc.save(`fileName.pdf`);
             }, 0);
@@ -74,7 +80,9 @@
             var doc = new jsPDF();
 
             var elementHTML = document.querySelector("#info");
-
+            const emblemUrl = 'https://pdf-lib.js.org/assets/mario_emblem.png'
+            var im = fetch(emblemUrl).then(res => res.arrayBuffer())
+            console.log(im)
             doc.fromHTML(elementHTML, {
                 callback: function (doc) {
                     console.log(doc)
@@ -91,13 +99,24 @@
 
     </script>
 
-
+<script>
+    createPdf();
+    async function createPdf() {
+      const pdfDoc = await PDFLib.PDFDocument.create();
+      const page = pdfDoc.addPage([400, 500]);
+      page.moveTo(100, 250);
+      page.drawText('Example Generating PDF with PDF-lib', {
+        size: 12});
+      const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+      document.getElementById('pdf').src = pdfDataUri;
+    }
+  </script>
 
 </head>
 
 <body>
-    {{!-- <button id="getPDF" onclick="getPDF2()">Download PDF</button> --}}
-
+    <button id="getPDF" onclick="getPDF3()">Download PDF</button>
+<iframe id="pdf" style="width: 100%; height: 100%;"></iframe>
     <div id="content" class="zima" class="card">
         <div class="card-body">
             <div>
@@ -318,7 +337,6 @@
         </div>
     </div>
     </div>
-    <div id="editor"></div>
     <script>
 
         var datos = document.getElementById("converted").innerHTML

@@ -18,13 +18,14 @@ import { Hoteles } from 'src/hoteles/entitys/hotel.entity';
 import { User } from 'src/users/entitiys/user.entity';
 import { ObservacionComentario } from 'src/observaciones/entitys/observacion-comentario.entity';
 
-import { createPdf } from '@saemhco/nestjs-html-pdf';
 
 const fs = require('fs')
 const path = require('path')
 const utils = require('util')
 const puppeteer = require('puppeteer')
+const hbs = require('handlebars')
 const hb = require('handlebars')
+
 const readFile = utils.promisify(fs.readFile)
 
 const PDFDocument = require('pdfkit-table');
@@ -221,6 +222,7 @@ export class ReportesService {
     const options = {
       format: 'Tabloid',
       displayHeaderFooter: true,
+      add_argument:("--headless=new")
       // margin: {
       //   left: '10mm',
       //   top: '25mm',
@@ -250,7 +252,7 @@ export class ReportesService {
     const filePath = path.join(process.cwd(), 'templates', 'pdf.hbs');;
     console.log('file',filePath);
     
-    return createPdf(filePath, options, data);
+    return this.createPdf(filePath, options, data);
   }
   
   async  getTemplateHtml(info:any) {
@@ -282,7 +284,7 @@ export class ReportesService {
     // we are using headless mode
     const browser = await puppeteer.launch(
       {
-        headless: true,
+        add_argument:("--headless=new"),
         args: [
             "--no-sandbox",
             "--disable-gpu",
@@ -301,6 +303,35 @@ export class ReportesService {
     });
     }
 
+    async generatepdf33(){
+       // Create a browser instance
+      const browser = await puppeteer.launch();
+
+      // Create a new page
+      const page = await browser.newPage();
+
+      // Website URL to export as pdf
+      const website_url = 'https://www.bannerbear.com/blog/how-to-download-images-from-a-website-using-puppeteer/'; 
+
+      // Open URL in current page
+      await page.goto(website_url, { waitUntil: 'networkidle0' }); 
+
+      //To reflect CSS used for screens instead of print
+      await page.emulateMediaType('screen');
+
+    // Downlaod the PDF
+      const pdf = await page.pdf({
+        path: 'result.pdf',
+        margin: { top: '100px', right: '50px', bottom: '100px', left: '50px' },
+        printBackground: true,
+        format: 'A4',
+      });
+
+      // Close the browser instance
+      await browser.close();
+
+      return pdf
+    }
     async generarPDF(): Promise<Buffer>
     {
         const pdfBuffer: Buffer = await new Promise( resolve => {
@@ -330,5 +361,83 @@ export class ReportesService {
         return pdfBuffer;
       
     }
+
+
+      createPdf = async (filePath: string, options = {}, data = {}) => {
+      try {
+        const browser = await puppeteer.launch();
+        if(browser) await browser.close()
+        const page = await browser.newPage();
+        
+        hbs.registerHelper("ifCond", function (
+            v1: any, 
+            operator: any, 
+            v2: any, 
+            options:any
+          ) {
+          switch (operator) {
+            case "==":
+              return v1 == v2 ? options.fn(data) : options.inverse(data);
+            case "===":
+              return v1 === v2 ? options.fn(data) : options.inverse(data);
+            case "!=":
+              return v1 != v2 ? options.fn(data) : options.inverse(data);
+            case "!==":
+              return v1 !== v2 ? options.fn(data) : options.inverse(data);
+            case "<":
+              return v1 < v2 ? options.fn(data) : options.inverse(data);
+            case "<=":
+              return v1 <= v2 ? options.fn(data) : options.inverse(data);
+            case ">":
+              return v1 > v2 ? options.fn(data) : options.inverse(data);
+            case ">=":
+              return v1 >= v2 ? options.fn(data) : options.inverse(data);
+            case "&&":
+              return v1 && v2 ? options.fn(data) : options.inverse(data);
+            case "||":
+              return v1 || v2 ? options.fn(data) : options.inverse(data);
+            default:
+              return options.inverse(options);
+          }
+        });
+    
+        hbs.registerHelper({
+          eq: (v1: any, v2: any) => v1 === v2,
+          ne: (v1: any, v2: any) => v1 !== v2,
+          lt: (v1: number, v2: number) => v1 < v2,
+          gt: (v1: number, v2: number) => v1 > v2,
+          lte: (v1: number, v2: number) => v1 <= v2,
+          gte: (v1: number, v2: number) => v1 >= v2,
+          and() {
+              return Array.prototype.every.call(arguments, Boolean);
+          },
+          or() {
+              return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
+          }
+        });
+        
+        const html = await fs.readFile(filePath, 'utf8');
+        const content = hbs.compile(html)(data);
+        await page.setContent(content);
+    
+        const buffer = await page.pdf({
+          // path: 'output-abc.pdf',
+          format: 'a4',
+          printBackground: true,
+          margin: {
+            left: '10mm',
+            top: '10mm',
+            right: '10mm',
+            bottom: '10mm',
+          },
+          ...options,
+        });
+        await browser.close();
+        // process.exit();
+        return buffer;
+        } catch (e) {
+        console.log(e);
+        }
+    };
 
 }

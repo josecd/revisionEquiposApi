@@ -42,11 +42,11 @@ export class UsersService {
     }
 
     async listarUsuarioPorID(id: number) {
-        const userFound = await this.userPerfil.findOne({
+        const userFound = await this.userRepositorio.findOne({
             where: {
-                idUsuarioPerfil: id,
+                idUsuario: id,
             },
-            // relations:['posts']
+            relations:['perfil']
 
         })
         console.log(userFound);
@@ -61,9 +61,9 @@ export class UsersService {
     async listarPerfiloPorID(id: number) {
         console.log('Entro', id);
 
-        const userFound = await this.userRepositorio.findOne({
+        const userFound = await this.userPerfil.findOne({
             where: {
-                idUsuario: id,
+                idUsuarioPerfil: id,
             },
             // relations:['posts']
 
