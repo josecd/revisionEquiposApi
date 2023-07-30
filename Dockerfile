@@ -80,10 +80,12 @@ WORKDIR /usr/src/app
 COPY --chown=node:node package*.json ./
 
 RUN npm ci
-RUN npm uninstall puppeteer
-RUN npm install puppeteer
+RUN apk add --no-cache udev ttf-freefont chromium git
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
 COPY --chown=node:node . .
+
 
 USER node
 
@@ -105,12 +107,7 @@ RUN npm run build
 
 ENV NODE_ENV production
 
-RUN apk add --no-cache udev ttf-freefont chromium git
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-ENV CHROMIUM_PATH /usr/bin/chromium-browser
-
 RUN npm ci --only=production && npm cache clean --force
-
 
 USER node
 
