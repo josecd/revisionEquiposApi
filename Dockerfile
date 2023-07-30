@@ -73,21 +73,17 @@
 # BUILD FOR LOCAL DEVELOPMENT
 ###################
 
-# FROM node:18-alpine As development
+FROM node:18-alpine As development
 
-# WORKDIR /usr/src/app
+WORKDIR /usr/src/app
 
-# COPY --chown=node:node package*.json ./
+COPY --chown=node:node package*.json ./
 
-# RUN npm ci
-# RUN apk add --no-cache udev ttf-freefont chromium git
-# ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-# ENV CHROMIUM_PATH /usr/bin/chromium-browser
+RUN npm ci
 
-# COPY --chown=node:node . .
+COPY --chown=node:node . .
 
-
-# USER node
+USER node
 
 ###################
 # BUILD FOR PRODUCTION
@@ -108,8 +104,15 @@ RUN npm run build
 ENV NODE_ENV production
 
 RUN npm ci --only=production && npm cache clean --force
+
+RUN npm uninstall puppeteer
+
+RUN npm install puppeteer
+
 RUN apk add --no-cache udev ttf-freefont chromium git
+
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+
 ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
 USER node
