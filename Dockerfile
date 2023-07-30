@@ -130,8 +130,8 @@ COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/templates ./templates
 
-# RUN apk add --no-cache udev ttf-freefont chromium git
-# ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-# ENV CHROMIUM_PATH /usr/bin/chromium-browser
+RUN apk add --no-cache chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
 CMD [ "node", "dist/main.js" ]
