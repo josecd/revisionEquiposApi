@@ -109,7 +109,7 @@ RUN npm i --only=production && npm cache clean --force
 
 RUN npm uninstall puppeteer
 RUN npm install puppeteer
-
+CMD ['find / -name chrome | grep puppeteer | grep -v node_modules']
 USER node
 
 ###################
