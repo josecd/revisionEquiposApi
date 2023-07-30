@@ -85,7 +85,7 @@ RUN npm install puppeteer
 
 COPY --chown=node:node . .
 
-RUN apk add --nocache udev ttf-freefont chromium git
+RUN apk add --no-cache udev ttf-freefont chromium git
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
@@ -114,7 +114,7 @@ RUN npm i --only=production && npm cache clean --force
 RUN npm uninstall puppeteer
 RUN npm install puppeteer
 
-RUN apk add --nocache udev ttf-freefont chromium git
+RUN apk add --no-cache udev ttf-freefont chromium git
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
@@ -130,7 +130,7 @@ COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/templates ./templates
 
-RUN apk add --nocache udev ttf-freefont chromium git
+RUN apk add --no-cache udev ttf-freefont chromium git
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
