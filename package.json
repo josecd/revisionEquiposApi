@@ -43,6 +43,7 @@
     "moment": "^2.29.4",
     "mysql2": "^3.3.3",
     "nest-aws-sdk": "^3.0.1",
+    "openai": "^3.3.0",
     "passport-jwt": "^4.0.1",
     "pdfkit": "^0.13.0",
     "pdfkit-table": "^0.1.99",

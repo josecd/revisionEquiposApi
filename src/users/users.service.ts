@@ -7,6 +7,7 @@ import { updateUserDto } from './dto/update-user.dto';
 import { Perfil } from './entitiys/perfil.entity';
 import { createPerfilDto } from './dto/create-perfil.dto';
 import { UploadFileS3Service } from 'src/services/upload-file-s3/upload-file-s3.service';
+import { OpenaiService } from 'src/services/openai/openai.service';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +16,8 @@ export class UsersService {
     constructor(
         @InjectRepository(User) private userRepositorio: Repository<User>,
         @InjectRepository(Perfil) private userPerfil: Repository<Perfil>,
-        private _up: UploadFileS3Service
+        private _up: UploadFileS3Service,
+        private _openai: OpenaiService
     ) {
 
     }
@@ -69,16 +71,16 @@ export class UsersService {
 
         })
         console.log(userFound);
-        
+
         if (!userFound) {
             return new HttpException('Usuario no exontrado', HttpStatus.NOT_FOUND)
         } else {
             return {
-                idUsuario:userFound.idUsuario,
-                nombre:userFound.nombre,
-                correo:userFound.correo,
-                perfil:userFound.perfil,
-              }
+                idUsuario: userFound.idUsuario,
+                nombre: userFound.nombre,
+                correo: userFound.correo,
+                perfil: userFound.perfil,
+            }
 
         }
     }
@@ -178,14 +180,14 @@ export class UsersService {
         pefil.tipoArchivo = file.mimetype;
         pefil.path = path;
 
-        const newUser = await this.userPerfil.create(pefil)
+        const newUser = this.userPerfil.create(pefil)
         const d = await this.userPerfil.save(newUser)
         const info = await this.userRepositorio.update({
             idUsuario: id,
         }, {
             perfil: newUser
         });
-        
+
         return info
 
 
@@ -194,7 +196,7 @@ export class UsersService {
         // newImgObs.observacion = observacion;
         // newImgObs.user = userFound;
         // this.observacionImgRepositorio.save(saveImgObs);
-        return await new HttpException('Informacion cargad', HttpStatus.ACCEPTED);
+        return new HttpException('Informacion cargad', HttpStatus.ACCEPTED);
 
 
         // const newUser = this.userPerfil.create(pefil)
@@ -202,4 +204,8 @@ export class UsersService {
         // return this.userPerfil.save(newUser)
     }
 
+    async correccion(mensaje: any) {
+        const dat =  await this._openai.correccionGramatical(mensaje)
+        return dat
+    }
 }

@@ -5,6 +5,8 @@ export const configurationen = () => {
         HOST:process.env.HOST,
         PASSWORD:process.env.PASSWORD,
         SECRETKEY:process.env.SECRETKEY,
-        USERNAME:process.env.USERNAME
+        USERNAME:process.env.USERNAME,
+        API_OPEN:process.env.API_OPEN,
+        API_ORG:process.env.API_ORG
     }
 }

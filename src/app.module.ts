@@ -11,6 +11,7 @@ import { UploadFileS3Service } from './services/upload-file-s3/upload-file-s3.se
 import * as  process from "process";
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { OpenaiService } from './services/openai/openai.service';
 
 @Module({
   imports: [
@@ -37,6 +38,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UploadFileS3Service],
+  providers: [AppService, UploadFileS3Service, OpenaiService],
 })
 export class AppModule {}
