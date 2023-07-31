@@ -23,6 +23,8 @@ export class AuthService {
             correo: correo,
             clave:pass
         },
+        relations:['perfil']
+
     })
     if (user?.clave !== pass) {
         throw new UnauthorizedException();
@@ -36,7 +38,8 @@ export class AuthService {
       user :{
         idUsuario:user.idUsuario,
         nombre:user.nombre,
-        correo:user.correo
+        correo:user.correo,
+        perfil:user.perfil,
       }
     };
 

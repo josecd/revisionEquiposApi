@@ -46,7 +46,7 @@ export class UsersService {
             where: {
                 idUsuario: id,
             },
-            relations:['perfil']
+            relations: ['perfil']
 
         })
         console.log(userFound);
@@ -61,19 +61,24 @@ export class UsersService {
     async listarPerfiloPorID(id: number) {
         console.log('Entro', id);
 
-        const userFound = await this.userPerfil.findOne({
+        const userFound = await this.userRepositorio.findOne({
             where: {
-                idUsuarioPerfil: id,
+                idUsuario: id,
             },
-            // relations:['posts']
+            relations: ['perfil']
 
         })
         console.log(userFound);
-
+        
         if (!userFound) {
             return new HttpException('Usuario no exontrado', HttpStatus.NOT_FOUND)
         } else {
-            return userFound;
+            return {
+                idUsuario:userFound.idUsuario,
+                nombre:userFound.nombre,
+                correo:userFound.correo,
+                perfil:userFound.perfil,
+              }
 
         }
     }
@@ -173,16 +178,15 @@ export class UsersService {
         pefil.tipoArchivo = file.mimetype;
         pefil.path = path;
 
-        const newUser =await  this.userPerfil.create(pefil)
+        const newUser = await this.userPerfil.create(pefil)
         const d = await this.userPerfil.save(newUser)
-        return await this.userRepositorio.update({
-           idUsuario:id,
-          }, {
-            perfil:newUser
-          });
-
+        const info = await this.userRepositorio.update({
+            idUsuario: id,
+        }, {
+            perfil: newUser
+        });
         
-        this.userPerfil.save( d)
+        return info
 
 
         // const newImgObs = await this.observacionImgRepositorio.create(imgObs);
@@ -190,7 +194,7 @@ export class UsersService {
         // newImgObs.observacion = observacion;
         // newImgObs.user = userFound;
         // this.observacionImgRepositorio.save(saveImgObs);
-        return  await new HttpException('Informacion cargad', HttpStatus.ACCEPTED);
+        return await new HttpException('Informacion cargad', HttpStatus.ACCEPTED);
 
 
         // const newUser = this.userPerfil.create(pefil)
