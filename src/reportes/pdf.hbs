@@ -7,10 +7,116 @@
     <title>{{title}}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.4/jspdf.plugin.autotable.min.js"></script>
+
+
+
+            {{!-- -----  --}}
+
+                <script src="https://unpkg.com/pdf-lib"></script>
+    <script>
+        function getPDF() {
+            var doc = new jsPDF();
+            source = $('#content')[0];
+            console.log(source)
+            // We'll make our own renderer to skip this editor
+            var specialElementHandlers = {
+                '#getPDF': function (element, renderer) {
+                    return true;
+                },
+                '.controls': function (element, renderer) {
+                    return true;
+                }
+            };
+
+            // All units are in the set measurement for the document
+            // This can be changed to "pt" (points), "mm" (Default), "cm", "in"
+            doc.fromHTML($('.content').get(0), 15, 15, {
+                'width': 170,
+                'elementHandlers': specialElementHandlers
+            });
+
+
+            doc.save('Generated.pdf');
+        }
+    </script>
+
+
+    <script>
+        function getPDF2() {
+            var doc = new jsPDF();
+            source = $('#info')[0];
+            // Source HTMLElement or a string containing HTML.
+            specialElementHandlers = {
+                '#editor': function (element, renderer) {
+                    return true
+                }
+            };
+            let pdfjs = document.querySelector('#content');
+
+
+            doc.fromHTML(
+                pdfjs,
+                15,
+                15,
+                {
+                    'width': 170,
+                    'elementHandlers': specialElementHandlers
+                }
+            );
+            doc.co
+            setTimeout(function () {
+                doc.save(`fileName.pdf`);
+            }, 0);
+            // doc.save('sample-file.pdf') 
+        }
+    </script>
+
+    <script>
+        function getPDF3() {
+            var doc = new jsPDF();
+
+            var elementHTML = document.querySelector("#info");
+            const emblemUrl = 'https://pdf-lib.js.org/assets/mario_emblem.png'
+            var im = fetch(emblemUrl).then(res => res.arrayBuffer())
+            console.log(im)
+            doc.fromHTML(elementHTML, {
+                callback: function (doc) {
+                    console.log(doc)
+                    // Save the PDF
+                    doc.save('sample-document.pdf');
+                },
+                x: 15,
+                y: 15,
+                width: 170, //target width in the PDF document
+                windowWidth: 650 //window width in CSS pixels
+            });
+        }
+
+
+    </script>
+
+<script>
+    createPdf();
+    async function createPdf() {
+      const pdfDoc = await PDFLib.PDFDocument.create();
+      const page = pdfDoc.addPage([400, 500]);
+      page.moveTo(100, 250);
+      page.drawText('Example Generating PDF with PDF-lib', {
+        size: 12});
+      const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+      document.getElementById('pdf').src = pdfDataUri;
+    }
+  </script>
+
 </head>
 
 <body>
-    <div class="card">
+    {{!-- <button id="getPDF" onclick="getPDF3()">Download PDF</button> --}}
+    <div id="content" class="zima" class="card">
         <div class="card-body">
             <div>
                 <div style="text-align: center;">
@@ -27,7 +133,7 @@
                             </div>
                             <div class="col-11" style="text-align: center; padding: 2%;">
                                 <div class="lh-1">
-                                    <h1 class="h4 mb-0 text-black lh-1" >CORPORATIVO MANTENIMIENTO DE COCINAS
+                                    <h1 class="h4 mb-0 text-black lh-1">CORPORATIVO MANTENIMIENTO DE COCINAS
                                     </h1>
                                     <br>
                                     <small>REVISIÓN DE EQUIPOS</small>
@@ -36,6 +142,7 @@
 
                         </div>
                     </div>
+                                            <h1 id="converted" style="display: none;">{{fechaRegistro}}</h1>
 
                     {{#each hoteles}}
                     <section style="text-align: center !important;">
@@ -53,11 +160,10 @@
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             FECHA</div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-            
-            
-                                            <h1 id="converted" style="display: none;">{{fechaRegistro}}</h1>
+
+
                                             <a id="asda"></a>
-            
+
                                             <!-- <h1 id="ido"></h1> -->
                                             <!-- 
                                             <input name="inputDate" type="text" value="2023-07-25 15:13:13">
@@ -78,55 +184,55 @@
 
                     <!-- informacion equipo_ -->
                     <div style="text-align: center !important;">
-                        
+
                         <div class="card shadow mb-4">
                             <div class="card-body">
                                 <div class="row"
-                                class="d-flex align-items-center p-3 my-3 text-black bg-purple rounded shadow-sm row">
-                                <div class="col">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        EQUIPO</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        {{equipo}}
+                                    class="d-flex align-items-center p-3 my-3 text-black bg-purple rounded shadow-sm row">
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            EQUIPO</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{equipo}}
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            MARCA</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{marca}}
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            MODELO</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{modelo}}
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            NÚMERO DE SERIE</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{numeroSerie}}
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            ÁREA</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{area}}
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            CRITICIDAD</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{criticidad}}
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        MARCA</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        {{marca}}
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        MODELO</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        {{modelo}}
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        NÚMERO DE SERIE</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        {{numeroSerie}}
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        ÁREA</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        {{area}}
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        CRITICIDAD</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        {{criticidad}}
-                                    </div>
-                                </div>
-                            </div>
-    
+
                             </div>
                         </div>
 
@@ -143,16 +249,23 @@
                             </div>
                         </div>
                     </section>
-
-                    <!-- Recomendaciones -->
+                  <!-- recomendaciones -->
                     <section style="text-align: initial !important;">
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">Recomendaciones</h6>
                             </div>
+                             {{#each comentarios}}
                             <div class="card-body">
-                                Favor de realizar seguimiento de afilado del disco de corte.
+                                
+                                    {{!-- <h5 class="card-title">{{comentario}}</h5> --}}
+                                    {{!-- <p>{{comentario}}</p>
+                                    <p >2023-07-25</p> --}}
+                                <h6 class="card-title">{{comentario}}</h6>
+                                <h7  id="converted2" class="card-subtitle mb-2 text-muted">{{dateString}}</h7>
+                                            
                             </div>
+                             {{/each}}
                         </div>
                     </section>
 
@@ -173,14 +286,34 @@
                         </div>
                     </section>
 
+  
 
-
-                </div>
-                <div style="page-break-before: always;"></div>
-                {{/each}}
+                    </div>
+                    <div style="page-break-before: always;"></div>
+                        {{/each}}
 
 
                 <section>
+
+                    <!-- Recomendaciones -->
+                    <section style="text-align: initial !important;">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Comentario</h6>
+                            </div>
+                            {{#if recomendaciones}}
+                                 <div class="card-body">
+                                {{recomendaciones}}
+                            </div>
+                            {{else}}
+                                 <div class="card-body">
+                                    No tiene comentarios
+                            </div>
+                            {{/if}}
+                       
+                        </div>
+                    </section>
+
 
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -203,9 +336,7 @@
                                                         {{nombreFirma}}
                                                         <img style="  object-fit: cover;
                                                         width:100%;
-                                                        height:100%;"
-                                                            src="{{url}}"
-                                                            alt="">
+                                                        height:100%;" src="{{url}}" alt="">
 
                                                     </div>
                                                 </div>
@@ -217,7 +348,7 @@
                                     </div>
                                 </div>
                                 {{/each}}
-                        
+
                             </div>
 
                         </div>
@@ -232,28 +363,42 @@
         </div>
     </div>
     </div>
-
     <script>
 
         var datos = document.getElementById("converted").innerHTML
         document.getElementById("asda").innerHTML = datos
-
         var date = new Date(datos);
-
         var day = date.getDate();
         var month = date.getMonth() + 1;
         var year = date.getFullYear();
-
         if (month < 10) month = "0" + month;
         if (day < 10) day = "0" + day;
-
         var today = year + "-" + month + "-" + day;
-
         document.getElementById("asda").innerHTML = today;
         document.getElementById('theDate').value = today;
 
 
+
     </script>
+
+        <script>
+
+        var datos = document.getElementById("converted2").innerHTML
+        document.getElementById("asda2").innerHTML = datos
+        var date = new Date(datos);
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        if (month < 10) month = "0" + month;
+        if (day < 10) day = "0" + day;
+        var today = year + "-" + month + "-" + day;
+        document.getElementById("asda2").innerHTML = today;
+        document.getElementById('theDate').value = today;
+
+
+
+    </script>
+
 </body>
 
 </html>
