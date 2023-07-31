@@ -4,8 +4,9 @@ import { ReportesService } from './reportes.service';
 import { crearReporteDto } from './dto/crear-reporte.dto';
 import { editarReporteDto } from './dto/editar-reporte.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from "express";
 import { crearFirmaDto } from './dto/crear-firmas.dto';
+import * as moment from "moment";
+
 @Controller('reportes')
 export class ReportesController {
 
@@ -65,12 +66,15 @@ export class ReportesController {
 
     @Get(':id/pdfReporte')
     async generatePDFOFI(@Res() res, @Param('id', ParseIntPipe) id: number) {
+        
         const data = await this._reportes.listarReportePorIdTodaLaInfo(id);
         const buffer = await this._reportes.generatepdfHtml(data[0]);
+        const d = new Date();
+        const fileName = 'reporte-'+data[0].idReporte+'-' + data[0].hoteles[0]['nombre']+'-'+moment(d).format('YYYY-MM-DD');
         res.set({
             // pdf
             'Content-Type': 'application/pdf',
-            'Content-Disposition': `attachment; filename=pdf.pdf`,
+            'Content-Disposition': `attachment; filename=${fileName}-.pdf`,
             'Content-Length': buffer.length,
             // prevent cache
             'Cache-Control': 'no-cache, no-store, must-revalidate',
