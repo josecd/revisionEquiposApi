@@ -79,7 +79,8 @@ export class ReportesService {
       .leftJoinAndMapMany('reportes.hoteles', Hoteles, 'hoteles', 'hoteles.idHotel = reportes.hotelId ')
       .leftJoinAndMapMany('reportes.usuario', User, 'usuario', 'usuario.idUsuario = reportes.userId ')
       .getMany();
-
+        console.log(queyView);
+      
 
     if (!reporteFound) {
       return new HttpException('Reporte no exontrado', HttpStatus.NOT_FOUND);
@@ -131,7 +132,7 @@ export class ReportesService {
       },
     });
     if (!reporteFound) {
-      return new HttpException('Reporte no exontrado', HttpStatus.NOT_FOUND);
+      return new HttpException('Reporte no encontrado', HttpStatus.NOT_FOUND);
     } else {
       const updateReporte = Object.assign(reporteFound, reporte);
       return this.reporteRepositorio.save(updateReporte);
@@ -187,7 +188,7 @@ export class ReportesService {
     newFirma.reporteF = reporteFound;
     return this.firmasRepositorio.save(saveFima);
   }
-
+ 
   async eliminarFirma(id: number, path: string) {
     if (!id) {
       return new HttpException('Id no recibido', HttpStatus.NOT_FOUND);
@@ -500,6 +501,5 @@ export class ReportesService {
     process.exit();
 
   }
-
 
 }

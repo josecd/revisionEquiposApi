@@ -142,6 +142,7 @@
 
                         </div>
                     </div>
+                                            <h1 id="converted" style="display: none;">{{fechaRegistro}}</h1>
 
                     {{#each hoteles}}
                     <section style="text-align: center !important;">
@@ -161,7 +162,6 @@
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
 
 
-                                            <h1 id="converted" style="display: none;">{{fechaRegistro}}</h1>
                                             <a id="asda"></a>
 
                                             <!-- <h1 id="ido"></h1> -->
@@ -249,16 +249,23 @@
                             </div>
                         </div>
                     </section>
-
-                    <!-- Recomendaciones -->
+                  <!-- recomendaciones -->
                     <section style="text-align: initial !important;">
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">Recomendaciones</h6>
                             </div>
+                             {{#each comentarios}}
                             <div class="card-body">
-                                Favor de realizar seguimiento de afilado del disco de corte.
+                                
+                                    {{!-- <h5 class="card-title">{{comentario}}</h5> --}}
+                                    {{!-- <p>{{comentario}}</p>
+                                    <p >2023-07-25</p> --}}
+                                <h6 class="card-title">{{comentario}}</h6>
+                                <h7  id="converted2" class="card-subtitle mb-2 text-muted">{{dateString}}</h7>
+                                            
                             </div>
+                             {{/each}}
                         </div>
                     </section>
 
@@ -279,14 +286,34 @@
                         </div>
                     </section>
 
+  
 
-
-                </div>
-                <div style="page-break-before: always;"></div>
-                {{/each}}
+                    </div>
+                    <div style="page-break-before: always;"></div>
+                        {{/each}}
 
 
                 <section>
+
+                    <!-- Recomendaciones -->
+                    <section style="text-align: initial !important;">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Comentario</h6>
+                            </div>
+                            {{#if recomendaciones}}
+                                 <div class="card-body">
+                                {{recomendaciones}}
+                            </div>
+                            {{else}}
+                                 <div class="card-body">
+                                    No tiene comentarios
+                            </div>
+                            {{/if}}
+                       
+                        </div>
+                    </section>
+
 
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -340,23 +367,38 @@
 
         var datos = document.getElementById("converted").innerHTML
         document.getElementById("asda").innerHTML = datos
-
         var date = new Date(datos);
-
         var day = date.getDate();
         var month = date.getMonth() + 1;
         var year = date.getFullYear();
-
         if (month < 10) month = "0" + month;
         if (day < 10) day = "0" + day;
-
         var today = year + "-" + month + "-" + day;
-
         document.getElementById("asda").innerHTML = today;
         document.getElementById('theDate').value = today;
 
 
+
     </script>
+
+        <script>
+
+        var datos = document.getElementById("converted2").innerHTML
+        document.getElementById("asda2").innerHTML = datos
+        var date = new Date(datos);
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        if (month < 10) month = "0" + month;
+        if (day < 10) day = "0" + day;
+        var today = year + "-" + month + "-" + day;
+        document.getElementById("asda2").innerHTML = today;
+        document.getElementById('theDate').value = today;
+
+
+
+    </script>
+
 </body>
 
 </html>

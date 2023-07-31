@@ -192,27 +192,29 @@ export class ObservacionesService {
     if (!obsFound) {
       return new HttpException('Observacion no encontrada', HttpStatus.NOT_FOUND);
     }
+    const d = new Date();
+    observacion.dateString = moment(d).format('YYYY-MM-DD')
     const newObservacion = this.observacionComnetaioRepositorio.create(observacion);
     newObservacion.user = userFound;
     newObservacion.observacion = obsFound;
     const saveObservacion = await this.observacionComnetaioRepositorio.save(newObservacion);
     return this.observacionComnetaioRepositorio.save(saveObservacion);
   }
- 
+
   firstExample() {
     // const filePath = path.join(process.cwd(), 'templates', './pdf-profile.html');
     // // const filePath = path.join(process.cwd(), 'templates', './index.html');
     // console.log('path',filePath);
-    
+
     // return createPdf(filePath);
   }
 
- 
 
-  pdfReporte(){
+
+  pdfReporte() {
 
   }
 
-  
+
 
 }

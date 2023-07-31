@@ -9,8 +9,14 @@ export class ObservacionComentario {
     idObservacionComentario: number
     @Column()
     comentario: string
-    @Column({type:'datetime',default:()=>'CURRENT_TIMESTAMP'}) 
+
+    @Column()
+    dateString: string
+
+    @Column({type:'datetime',default:()=>'CURRENT_TIMESTAMP'},) 
     fechaRegistro: Date
+
+    
     @Column({default: '1'})
     esActivo: string
 
