@@ -73,7 +73,6 @@ export class ObservacionesController {
 
   @Post('agregarComentario')
   agregarComentario(@Body() comentario) {
-    console.log(comentario);
     return this._observaciones.crearComentario(comentario);
   }
 

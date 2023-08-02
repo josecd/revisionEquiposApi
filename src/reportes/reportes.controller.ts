@@ -84,4 +84,14 @@ export class ReportesController {
 
         res.end(buffer);
     }
+
+    @Post('/filter')
+    getFilters(@Body() filters) {   
+        return this._reportes.listarReportesFiltros(filters);
+    }
+
+    @Post('/filtermobile')
+    getFiltersMobile(@Body() filters) {   
+        return this._reportes.listarReportesFiltrosMobile(filters);
+    }
 }

@@ -57,11 +57,7 @@ export class UsersController {
 
     @Post('correccion')
     async correcionGramatica(@Body() mensaje) {
-        console.log('Mensaje');
-        
         const info:any = await this._openai.correccionGramatical(mensaje?.text)
-        console.log(info);
-        
         return new HttpException(info, HttpStatus.ACCEPTED)
     }
 

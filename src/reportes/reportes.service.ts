@@ -89,6 +89,45 @@ export class ReportesService {
     }
   }
 
+  async listarReportesFiltros(filter) {
+    let queryData = ''
+    if (filter?.hotel) {
+      queryData= `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel})`
+    }else{
+      queryData= `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio}`
+    }
+    const queyView = await this.reporteRepositorio
+      .createQueryBuilder('reportes')
+      .where(queryData)
+      .leftJoinAndMapMany('reportes.observaciones', Observacion, 'observacion', 'observacion.reporteIdReporte = reportes.idReporte')
+      .orderBy('reportes.fechaRegistro', 'DESC')
+      .leftJoinAndMapMany('observacion.imagenes', ObservacionImagen, 'imagenes', 'imagenes.observacionIdObservacion = observacion.idObservacion')
+      .leftJoinAndMapMany('observacion.comentarios', ObservacionComentario, 'comentarios', 'comentarios.observacionIdObservacion = observacion.idObservacion')
+      .leftJoinAndMapMany('reportes.firmas', FirmasReporte, 'firmasReporte', 'firmasReporte.reporteId = reportes.idReporte ')
+      .leftJoinAndMapOne('reportes.hoteles', Hoteles, 'hoteles', 'hoteles.idHotel = reportes.hotelId ')
+      .leftJoinAndMapOne('reportes.usuario', User, 'usuario', 'usuario.idUsuario = reportes.userId ')
+      .getMany()
+        return queyView;
+  }
+
+  async listarReportesFiltrosMobile(filter) {
+    let queryData = ''
+    if (filter?.hotel) {
+      queryData= `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel})`
+    }else{
+      queryData= `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio}`
+    }
+    const queyView = await this.reporteRepositorio
+      .createQueryBuilder('reportes')
+      .where(queryData)
+      .orderBy('reportes.fechaRegistro', 'DESC')
+      .leftJoinAndMapOne('reportes.hoteles', Hoteles, 'hoteles', 'hoteles.idHotel = reportes.hotelId ')
+      .leftJoinAndMapOne('reportes.usuario', User, 'usuario', 'usuario.idUsuario = reportes.userId ')
+      .getMany()
+        return queyView;
+  }
+
+
   async listarReportePorIdSinExecption(id: number) {
     const userFound = await this.reporteRepositorio.findOne({
       where: {
@@ -463,7 +502,7 @@ export class ReportesService {
     // Create a browser instance
     const browser = await puppeteer.launch({
       headless: 'new',
-      executablePath: process.env.CHROMIUM_PATH,
+      // executablePath: process.env.CHROMIUM_PATH,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -486,6 +525,13 @@ export class ReportesService {
     await page.setContent(content);
     const buffer = await page.pdf({
       // path: 'output-abc.pdf',
+    //   displayHeaderFooter: true,
+    //   headerTemplate:'',
+    //   footerTemplate: `
+    //   <div style="color: lightgray; border-top: solid lightgray 1px; font-size: 10px; padding-top: 5px; text-align: center; width: 100%;">
+    //   <span>This is a test message</span> - <span class="pageNumber"></span>
+    // </div>
+    // `,
       printBackground: true,
       margin: {
         left: '10mm',

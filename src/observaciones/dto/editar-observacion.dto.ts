@@ -7,7 +7,7 @@ export class editarObservacionDto {
     numeroSerie?: string
     area?: string
     observacion?:string;
-
+    criticidad?:string;
 }
 
 
