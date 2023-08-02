@@ -502,7 +502,7 @@ export class ReportesService {
     // Create a browser instance
     const browser = await puppeteer.launch({
       headless: 'new',
-      // executablePath: process.env.CHROMIUM_PATH,
+      executablePath: process.env.CHROMIUM_PATH,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
