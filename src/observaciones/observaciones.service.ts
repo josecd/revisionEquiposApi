@@ -115,8 +115,6 @@ export class ObservacionesService {
       await Promise.all(files.map(async (element) => {
         const path = `${observacion.reporteId}/observacion/` + this._up.returnNameDateType(element['mimetype']);
         const imgBucket = await this._up.upPublicFile(element.buffer, path);
-        console.log(imgBucket);
-
 
         imgObs.url = imgBucket.Location;
         imgObs.nombreArchivo = imgBucket.Key;

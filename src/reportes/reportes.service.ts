@@ -79,8 +79,6 @@ export class ReportesService {
       .leftJoinAndMapMany('reportes.hoteles', Hoteles, 'hoteles', 'hoteles.idHotel = reportes.hotelId ')
       .leftJoinAndMapMany('reportes.usuario', User, 'usuario', 'usuario.idUsuario = reportes.userId ')
       .getMany();
-        console.log(queyView);
-      
 
     if (!reporteFound) {
       return new HttpException('Reporte no exontrado', HttpStatus.NOT_FOUND);
@@ -153,10 +151,8 @@ export class ReportesService {
     }
 
     const newReport = this.reporteRepositorio.create(reporte);
-    console.log(newReport);
 
     const saveReporte = await this.reporteRepositorio.save(newReport);
-    console.log(saveReporte);
 
     newReport.usuario = userFound;
     newReport.hoteles = hotelFound;
@@ -215,7 +211,6 @@ export class ReportesService {
     if (!reporteFound) {
       return new HttpException('Reporte no encontrado', HttpStatus.NOT_FOUND);
     }
-    console.log(file);
 
     const path = `${firma.reporteId}/firmas/` + this._up.returnNameDateType(file['mimetype'])
     const fileUP = await this._aws.upPublicFile(file.buffer, path);
@@ -290,7 +285,6 @@ export class ReportesService {
 
     };
     const filePath = path.join(process.cwd(), 'templates', 'pdf.hbs');;
-    console.log('file', filePath);
 
     return this.createPdf(filePath, options, data);
   }

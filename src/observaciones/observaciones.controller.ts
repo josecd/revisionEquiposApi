@@ -55,14 +55,11 @@ export class ObservacionesController {
     @UploadedFiles() files: Array<Express.Multer.File>,
     @Body() imgObs: crearImgObservacionDto,
   ) {
-    console.log('entri');
-
     return this._observaciones.agregarImagenesObservacion(files, imgObs)
   }
 
   @Post('eliminarImgObservacion')
   createUser(@Body() imgObs) {
-    console.log(imgObs);
     return this._observaciones.eliminarImgObservacion(imgObs.idObservacionImagen, imgObs.path);
   }
 
