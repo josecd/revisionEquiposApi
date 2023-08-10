@@ -275,7 +275,7 @@ export class ReportesService {
       //     </div>
       //     <div class="col-11" style="text-align: center;">
       //         <div class="lh-1">
-      //             <h1 class="h6 mb-0 text-black lh-1">CORPORATIVO MANTENIMIENTO DE COCINAS
+      //             <h1 class="h6 mb-0 text-black lh-1">CORPORATIVO MANTENIMIENTO COCINAS
       //             </h1>
       //             <small>REVISIÓN DE EQUIPOS</small>
       //         </div>
@@ -496,7 +496,7 @@ export class ReportesService {
     // Create a browser instance
     const browser = await puppeteer.launch({
       headless: 'new',
-      executablePath: process.env.CHROMIUM_PATH,
+      // executablePath: process.env.CHROMIUM_PATH,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',

@@ -118,7 +118,7 @@
 
 <body>
     {{!-- <button id="getPDF" onclick="getPDF3()">Download PDF</button> --}}
-    
+
     <div id="content" class="zima" class="card">
         <div class="card-body">
             <div>
@@ -136,7 +136,7 @@
                             </div>
                             <div class="col-11" style="text-align: center; padding: 2%;">
                                 <div class="lh-1">
-                                    <h1 class="h4 mb-0 text-black lh-1">CORPORATIVO MANTENIMIENTO DE COCINAS
+                                    <h1 class="h4 mb-0 text-black lh-1">CORPORATIVO MANTENIMIENTO COCINAS
                                     </h1>
                                     <br>
                                     <small>REVISIÓN DE EQUIPOS</small>
@@ -202,23 +202,41 @@
                                     <div class="col">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             MARCA</div>
+                                        {{#if marca}}
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             {{marca}}
                                         </div>
+                                        {{else}}
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            S/M
+                                        </div>
+                                        {{/if}}
                                     </div>
                                     <div class="col">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             MODELO</div>
+                                        {{#if modelo}}
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             {{modelo}}
                                         </div>
+                                        {{else}}
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            S/M
+                                        </div>
+                                        {{/if}}
                                     </div>
                                     <div class="col">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             NÚMERO DE SERIE</div>
+                                        {{#if numeroSerie}}
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             {{numeroSerie}}
                                         </div>
+                                        {{else}}
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            S/S
+                                        </div>
+                                        {{/if}}
                                     </div>
                                     <div class="col">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
@@ -315,12 +333,12 @@
                 {{#each firmas}}
                 <h1>da</h1>
                 {{/each}} --}}
-                    {{!-- {{ myPartial }} --}}
+                {{!-- {{ myPartial }} --}}
                 <div style="page-break-before: always;"></div>
-                           
+
                 {{/each}}
 
- 
+
                 <section>
 
                     <!-- Recomendaciones -->
