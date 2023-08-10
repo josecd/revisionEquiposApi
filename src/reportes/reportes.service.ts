@@ -17,6 +17,7 @@ import { ObservacionesService } from 'src/observaciones/observaciones.service';
 import { Hoteles } from 'src/hoteles/entitys/hotel.entity';
 import { User } from 'src/users/entitiys/user.entity';
 import { ObservacionComentario } from 'src/observaciones/entitys/observacion-comentario.entity';
+import { map } from 'rxjs';
 
 
 const fs = require('fs')
@@ -39,7 +40,8 @@ export class ReportesService {
     private reporteRepositorio: Repository<Reportes>,
     @InjectRepository(FirmasReporte)
     private firmasRepositorio: Repository<FirmasReporte>,
-
+    // @InjectRepository(Observacion)
+    // private observacionRepositorio: Repository<Observacion>,
     private _user: UsersService,
     private _hotel: HotelesService,
     private _aws: UploadFileS3Service,
@@ -90,9 +92,9 @@ export class ReportesService {
   async listarReportesFiltros(filter) {
     let queryData = ''
     if (filter?.hotel) {
-      queryData= `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel})`
-    }else{
-      queryData= `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio}`
+      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel})`
+    } else {
+      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio}`
     }
     const queyView = await this.reporteRepositorio
       .createQueryBuilder('reportes')
@@ -105,15 +107,15 @@ export class ReportesService {
       .leftJoinAndMapOne('reportes.hoteles', Hoteles, 'hoteles', 'hoteles.idHotel = reportes.hotelId ')
       .leftJoinAndMapOne('reportes.usuario', User, 'usuario', 'usuario.idUsuario = reportes.userId ')
       .getMany()
-        return queyView;
+    return queyView;
   }
 
   async listarReportesFiltrosMobile(filter) {
     let queryData = ''
     if (filter?.hotel) {
-      queryData= `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel})`
-    }else{
-      queryData= `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio}`
+      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel})`
+    } else {
+      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio}`
     }
     const queyView = await this.reporteRepositorio
       .createQueryBuilder('reportes')
@@ -122,9 +124,42 @@ export class ReportesService {
       .leftJoinAndMapOne('reportes.hoteles', Hoteles, 'hoteles', 'hoteles.idHotel = reportes.hotelId ')
       .leftJoinAndMapOne('reportes.usuario', User, 'usuario', 'usuario.idUsuario = reportes.userId ')
       .getMany()
-        return queyView;
+    return queyView;
   }
 
+  async listarReportesFiltroExcel(filter) {
+    // let queryData = 'ASD'
+    if (filter?.hotel) {
+      const query = await this.reporteRepositorio.query(`SELECT idReporte FROM reportes WHERE MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel})`)
+      const id = await query.map((e: any) => { return e.idReporte })
+      const query2 = await this.reporteRepositorio.query(`SELECT * FROM observacion LEFT JOIN reportes ON reportes.idReporte = observacion.reporteIdReporte WHERE observacion.reporteId IN(${id}) `)
+      console.log(id.toString());
+      // console.log(query2);
+
+    } else {
+      const query = await this.reporteRepositorio.query(`SELECT idReporte FROM reportes WHERE MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio}`)
+      const id = await query.map((e: any) => { return e.idReporte })
+      const query2 = await this.reporteRepositorio.query(`SELECT * FROM observacion LEFT JOIN reportes ON reportes.idReporte = observacion.reporteIdReporte WHERE observacion.reporteId IN(${id}) `)
+      console.log(id.toString());
+      // console.log(query2);
+    }
+    // const queryView = await this.observacionRepositorio.createQueryBuilder('observacion')
+    //   .leftJoinAndMapMany('reportes.idReporte', Reportes, 'reporte', 'reportes.idReporte = observacion.reporteIdReporte')
+    //   console.log('TEst',queryView);
+      
+    // const queyView = await this.reporteRepositorio
+    //   .createQueryBuilder('reportes')
+    //   .where(queryData)
+    //   .leftJoinAndMapMany('reportes.observaciones', Observacion, 'observacion', 'observacion.reporteIdReporte = reportes.idReporte')
+    //   .orderBy('reportes.fechaRegistro', 'DESC')
+    //   .leftJoinAndMapMany('observacion.imagenes', ObservacionImagen, 'imagenes', 'imagenes.observacionIdObservacion = observacion.idObservacion')
+    //   .leftJoinAndMapMany('observacion.comentarios', ObservacionComentario, 'comentarios', 'comentarios.observacionIdObservacion = observacion.idObservacion')
+    //   .leftJoinAndMapMany('reportes.firmas', FirmasReporte, 'firmasReporte', 'firmasReporte.reporteId = reportes.idReporte ')
+    //   .leftJoinAndMapOne('reportes.hoteles', Hoteles, 'hoteles', 'hoteles.idHotel = reportes.hotelId ')
+    //   .leftJoinAndMapOne('reportes.usuario', User, 'usuario', 'usuario.idUsuario = reportes.userId ')
+    //   .getMany()
+    // return queyView;
+  }
 
   async listarReportePorIdSinExecption(id: number) {
     const userFound = await this.reporteRepositorio.findOne({
@@ -222,7 +257,7 @@ export class ReportesService {
     newFirma.reporteF = reporteFound;
     return this.firmasRepositorio.save(saveFima);
   }
- 
+
   async eliminarFirma(id: number, path: string) {
     if (!id) {
       return new HttpException('Id no recibido', HttpStatus.NOT_FOUND);
@@ -346,7 +381,7 @@ export class ReportesService {
         '--disable-setuid-sandbox',
         "--headless=new"
       ],
-        
+
     });
 
     // Create a new page
@@ -414,7 +449,7 @@ export class ReportesService {
             '--disable-setuid-sandbox',
             "--headless=new"
           ],
-            
+
         }
       );
       if (browser) await browser.close()
@@ -466,7 +501,7 @@ export class ReportesService {
           return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
         }
       });
-      
+
       const html = await fs.readFileSync(filePath, 'utf-8');
       const content = hbs.compile(html)(data);
       await page.setContent(content);
@@ -492,11 +527,11 @@ export class ReportesService {
   };
 
 
-  async generatepdfHtml(info:any) {
+  async generatepdfHtml(info: any) {
     // Create a browser instance
     const browser = await puppeteer.launch({
       headless: 'new',
-      // executablePath: process.env.CHROMIUM_PATH,
+      executablePath: process.env.CHROMIUM_PATH,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -508,7 +543,7 @@ export class ReportesService {
         '--single-process',
         '--disable-gpu'
       ],
-        
+
     });
 
     // Create a new page
@@ -519,13 +554,13 @@ export class ReportesService {
     await page.setContent(content);
     const buffer = await page.pdf({
       // path: 'output-abc.pdf',
-    //   displayHeaderFooter: true,
-    //   headerTemplate:'',
-    //   footerTemplate: `
-    //   <div style="color: lightgray; border-top: solid lightgray 1px; font-size: 10px; padding-top: 5px; text-align: center; width: 100%;">
-    //   <span>This is a test message</span> - <span class="pageNumber"></span>
-    // </div>
-    // `,
+      //   displayHeaderFooter: true,
+      //   headerTemplate:'',
+      //   footerTemplate: `
+      //   <div style="color: lightgray; border-top: solid lightgray 1px; font-size: 10px; padding-top: 5px; text-align: center; width: 100%;">
+      //   <span>This is a test message</span> - <span class="pageNumber"></span>
+      // </div>
+      // `,
       printBackground: true,
       margin: {
         left: '10mm',

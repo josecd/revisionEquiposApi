@@ -94,4 +94,10 @@ export class ReportesController {
     getFiltersMobile(@Body() filters) {   
         return this._reportes.listarReportesFiltrosMobile(filters);
     }
+
+    
+    @Post('/filterExcel')
+    getFilterExcel(@Body() filters) {   
+        return this._reportes.listarReportesFiltroExcel(filters);
+    }
 }
