@@ -20,7 +20,7 @@ export class Observacion {
     numeroSerie: string
     @Column({nullable:true})
     area: string
-    @Column({nullable:true})
+    @Column({length: 2500, nullable:true})
     observacion:string;
     @Column({nullable:true})
     criticidad:string; 

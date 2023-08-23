@@ -7,7 +7,7 @@ import { User } from "src/users/entitiys/user.entity";
 export class ObservacionComentario {
     @PrimaryGeneratedColumn()
     idObservacionComentario: number
-    @Column()
+    @Column({length: 2500,nullable:true})
     comentario: string
 
     @Column()
