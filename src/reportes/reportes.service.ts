@@ -89,6 +89,34 @@ export class ReportesService {
     }
   }
 
+  async listarReportePorIdTodaLaInfoAlto(id: number) {
+    const reporteFound = await this.reporteRepositorio.findOne({
+      where: {
+        idReporte: id,
+      },
+      relations: ['hoteles', 'usuario']
+    })
+    const queyView = await this.reporteRepositorio
+      .createQueryBuilder('reportes')
+      .where(`reportes.idReporte = ${id}`)
+      .leftJoinAndMapMany('reportes.observaciones', Observacion, 'observacion', 'observacion.reporteIdReporte = reportes.idReporte')
+      .andWhere("observacion.criticidad LIKE '%Alto%'")
+      .orderBy('reportes.fechaRegistro', 'DESC')
+      .leftJoinAndMapMany('observacion.imagenes', ObservacionImagen, 'imagenes', 'imagenes.observacionIdObservacion = observacion.idObservacion')
+      .leftJoinAndMapMany('observacion.comentarios', ObservacionComentario, 'comentarios', 'comentarios.observacionIdObservacion = observacion.idObservacion')
+      .leftJoinAndMapMany('reportes.firmas', FirmasReporte, 'firmasReporte', 'firmasReporte.reporteId = reportes.idReporte ')
+      .leftJoinAndMapMany('reportes.hoteles', Hoteles, 'hoteles', 'hoteles.idHotel = reportes.hotelId ')
+      .leftJoinAndMapMany('reportes.usuario', User, 'usuario', 'usuario.idUsuario = reportes.userId ')
+      .getMany();
+
+    if (!reporteFound) {
+      return new HttpException('Reporte no exontrado', HttpStatus.NOT_FOUND);
+    } else {
+      return queyView;
+    }
+  }
+
+
   async listarReportesFiltros(filter) {
     let queryData = ''
     if (filter?.hotel) {
@@ -102,6 +130,29 @@ export class ReportesService {
       .leftJoinAndMapMany('reportes.observaciones', Observacion, 'observacion', 'observacion.reporteIdReporte = reportes.idReporte')
       .orderBy('reportes.fechaRegistro', 'DESC')
       .leftJoinAndMapMany('observacion.imagenes', ObservacionImagen, 'imagenes', 'imagenes.observacionIdObservacion = observacion.idObservacion')
+      .leftJoinAndMapMany('observacion.comentarios', ObservacionComentario, 'comentarios', 'comentarios.observacionIdObservacion = observacion.idObservacion')
+      .leftJoinAndMapMany('reportes.firmas', FirmasReporte, 'firmasReporte', 'firmasReporte.reporteId = reportes.idReporte ')
+      .leftJoinAndMapOne('reportes.hoteles', Hoteles, 'hoteles', 'hoteles.idHotel = reportes.hotelId ')
+      .leftJoinAndMapOne('reportes.usuario', User, 'usuario', 'usuario.idUsuario = reportes.userId ')
+      .getMany()
+    return queyView;
+  }
+
+  
+  async listarReportesFiltros2(filter) {
+    let queryData = ''
+    if (filter?.hotel) {
+      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel})`
+    } else {
+      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio}`
+    }
+    const queyView = await this.reporteRepositorio
+      .createQueryBuilder('reportes')
+      .where(queryData)
+      .leftJoinAndMapMany('reportes.observaciones', Observacion, 'observacion', "observacion.reporteIdReporte = reportes.idReporte" )
+      .andWhere("observacion.criticidad LIKE '%Alto%'")
+      .orderBy('reportes.fechaRegistro', 'DESC')
+      .leftJoinAndMapMany('c.imagenes', ObservacionImagen, 'imagenes', 'imagenes.observacionIdObservacion = observacion.idObservacion')
       .leftJoinAndMapMany('observacion.comentarios', ObservacionComentario, 'comentarios', 'comentarios.observacionIdObservacion = observacion.idObservacion')
       .leftJoinAndMapMany('reportes.firmas', FirmasReporte, 'firmasReporte', 'firmasReporte.reporteId = reportes.idReporte ')
       .leftJoinAndMapOne('reportes.hoteles', Hoteles, 'hoteles', 'hoteles.idHotel = reportes.hotelId ')
@@ -526,7 +577,6 @@ export class ReportesService {
     }
   };
 
-
   async generatepdfHtml(info: any) {
     // Create a browser instance
     const browser = await puppeteer.launch({
@@ -547,6 +597,16 @@ export class ReportesService {
     });
 
     // Create a new page
+    // console.log(tipo);
+    
+    // let templatTipo= ''
+    // if (tipo =='Recorrido') {
+    //   templatTipo = 'pdf.hbs'
+    // }else if (tipo =='Baja') {
+    //   templatTipo = 'pdfBaja.hbs'
+    // }else if (tipo =='Mantenimiento') {
+    //   templatTipo = 'pdfMantenimiento.hbs'
+    // }
     const page = await browser.newPage();
     const filePath = path.join(process.cwd(), 'templates', 'pdf.hbs');;
     const html = await fs.readFileSync(filePath, 'utf-8');
@@ -576,5 +636,65 @@ export class ReportesService {
     process.exit();
 
   }
+  async generatepdfHtml2(info: any,tipo:any) {
+    // Create a browser instance
+    const browser = await puppeteer.launch({
+      headless: 'new',
+      executablePath: process.env.CHROMIUM_PATH,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        "--headless=new",
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process',
+        '--disable-gpu'
+      ],
 
+    });
+
+    // Create a new page
+    console.log(tipo);
+    
+    let templatTipo= ''
+    if (tipo =='Recorrido') {
+      templatTipo = 'pdf.hbs'
+    }else if (tipo =='Baja') {
+      templatTipo = 'pdfBaja.hbs'
+    }else if (tipo =='Mantenimiento') {
+      templatTipo = 'pdfMantenimiento.hbs'
+    }
+    const page = await browser.newPage();
+    const filePath = path.join(process.cwd(), 'templates', templatTipo);;
+    const html = await fs.readFileSync(filePath, 'utf-8');
+    const content = hbs.compile(html)(info);
+    await page.setContent(content);
+    const buffer = await page.pdf({
+      // path: 'output-abc.pdf',
+      //   displayHeaderFooter: true,
+      //   headerTemplate:'',
+      //   footerTemplate: `
+      //   <div style="color: lightgray; border-top: solid lightgray 1px; font-size: 10px; padding-top: 5px; text-align: center; width: 100%;">
+      //   <span>This is a test message</span> - <span class="pageNumber"></span>
+      // </div>
+      // `,
+      printBackground: true,
+      margin: {
+        left: '10mm',
+        top: '10mm',
+        right: '10mm',
+        bottom: '10mm',
+      },
+      format: 'Tabloid',
+    });
+
+    await browser.close();
+    return buffer;
+    process.exit();
+
+  }
+
+  
 }

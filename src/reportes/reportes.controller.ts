@@ -26,6 +26,11 @@ export class ReportesController {
         return this._reportes.listarReportePorIdTodaLaInfo(id);
     }
 
+    @Get(':id/alto')
+    listarUsuarioAlto(@Param('id', ParseIntPipe) id: number) {
+        return this._reportes.listarReportePorIdTodaLaInfoAlto(id);
+    }
+
 
     @Post()
     createReporte(@Body() newReporte: crearReporteDto) {
@@ -62,11 +67,24 @@ export class ReportesController {
         return informacion;
     }
 
+    @Get('pdf/view/:id/Baja')
+    @Render('pdfBaja.hbs')
+    async root2(@Param('id', ParseIntPipe) id: number) {
+        const data = await this._reportes.listarReportePorIdTodaLaInfo(id);
+        const informacion = data[0]
+        return informacion;
+    }
 
+    @Get('pdf/view/:id/Mantenimiento')
+    @Render('pdf.hbs')
+    async root3(@Param('id', ParseIntPipe) id: number) {
+        const data = await this._reportes.listarReportePorIdTodaLaInfo(id);
+        const informacion = data[0]
+        return informacion;
+    }
 
     @Get(':id/pdfReporte')
     async generatePDFOFI(@Res() res, @Param('id', ParseIntPipe) id: number) {
-        
         const data = await this._reportes.listarReportePorIdTodaLaInfo(id);
         const buffer = await this._reportes.generatepdfHtml(data[0]);
         const d = new Date();
@@ -85,9 +103,37 @@ export class ReportesController {
         res.end(buffer);
     }
 
+    @Get(':id/pdfReporte/:tipo')
+    async generatePDFOFI2(@Res() res, @Param('id', ParseIntPipe) id: number, @Param('tipo') tipo: string) {
+        console.log('tipo',tipo);
+        
+        const data = await this._reportes.listarReportePorIdTodaLaInfo(id);
+        const buffer = await this._reportes.generatepdfHtml2(data[0],tipo);
+        const d = new Date();
+        const fileName = 'reporte-'+data[0].idReporte+'-' + data[0].hoteles[0]['nombre']+'-'+moment(d).format('YYYY-MM-DD');
+        res.set({
+            // pdf
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': `attachment; filename=${fileName}-.pdf`,
+            'Content-Length': buffer.length,
+            // prevent cache
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            Pragma: 'no-cache',
+            Expires: 0,
+        });
+
+        res.end(buffer);
+    }
+
+
     @Post('/filter')
     getFilters(@Body() filters) {   
         return this._reportes.listarReportesFiltros(filters);
+    }
+
+    @Post('/filter2')
+    getFilters2(@Body() filters) {   
+        return this._reportes.listarReportesFiltros2(filters);
     }
 
     @Post('/filtermobile')
