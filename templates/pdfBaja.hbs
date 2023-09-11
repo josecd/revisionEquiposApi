@@ -136,10 +136,10 @@
                             </div>
                             <div class="col-11" style="text-align: center; padding: 2%;">
                                 <div class="lh-1">
-                                    <h1 class="h4 mb-0 text-black lh-1">CORPORATIVO MANTENIMIENTO COCINAS
+                                    <h1 class="h4 mb-0 text-black lh-1">DICTAMEN TÉCNICO DE EQUIPO(S) PARA BAJA
                                     </h1>
                                     <br>
-                                    <small>REVISIÓN DE EQUIPOS</small>
+                                    {{!-- <small>REVISIÓN DE EQUIPOS</small> --}}
                                 </div>
                             </div>
 
@@ -173,6 +173,8 @@
                                             <input type="date" id="theDate" value="2023-07-25 15:13:13"> -->
                                         </div>
                                     </div>
+
+
                                 </div>
                             </div>
                         </div>
@@ -188,10 +190,52 @@
                     <!-- informacion equipo_ -->
                     <div style="text-align: center !important;">
 
+
                         <div class="card shadow mb-4">
                             <div class="card-body">
                                 <div class="row"
                                     class="d-flex align-items-center p-3 my-3 text-black bg-purple rounded shadow-sm row">
+
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            ITEM</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{#if identificador}}
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                {{identificador}}
+                                            </div>
+                                            {{else}}
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                S/I
+                                            </div>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+
+
+                                    {{#if marca}}
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            ADQUISICION DEL EQUIPO</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{adquisicionEquipo}}
+                                        </div>
+                                    </div>
+                                    {{/if}}
+
+
+                                    {{#if ubicacion}}
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            ubicacion</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{ubicacion}}
+                                        </div>
+                                    </div>
+                                    {{/if}}
+
+
+                                    {{#if equipo}}
                                     <div class="col">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             EQUIPO</div>
@@ -199,62 +243,20 @@
                                             {{equipo}}
                                         </div>
                                     </div>
-                                    <div class="col">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            MARCA</div>
-                                        {{#if marca}}
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            {{marca}}
-                                        </div>
-                                        {{else}}
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            S/M
-                                        </div>
-                                        {{/if}}
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            MODELO</div>
-                                        {{#if modelo}}
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            {{modelo}}
-                                        </div>
-                                        {{else}}
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            S/M
-                                        </div>
-                                        {{/if}}
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            NÚMERO DE SERIE</div>
-                                        {{#if numeroSerie}}
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            {{numeroSerie}}
-                                        </div>
-                                        {{else}}
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            S/S
-                                        </div>
-                                        {{/if}}
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            ÁREA</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            {{area}}
-                                        </div>
-                                    </div>
+                                    {{/if}}
 
-                                    {{#if criticidad}}
+                                    {{#if oc}}
                                     <div class="col">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            CRITICIDAD</div>
+                                            OC</div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            {{criticidad}}
+                                            {{oc}}
                                         </div>
                                     </div>
                                     {{/if}}
+
+
+
 
 
                                 </div>
@@ -262,7 +264,101 @@
                             </div>
                         </div>
 
+
+                        <div class="card shadow mb-4">
+                            <div class="card-body">
+                                <div class="row"
+                                    class="d-flex align-items-center p-3 my-3 text-black bg-purple rounded shadow-sm row">
+
+
+                                    {{#if sapID}}
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            sapID</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{sapID}}
+                                        </div>
+                                    </div>
+                                    {{/if}}
+
+                                    {{#if marca}}
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Marca</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{marca}}
+                                        </div>
+                                    </div>
+                                    {{/if}}
+
+
+                                    {{#if modelo}}
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Modelo</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{modelo}}
+                                        </div>
+                                    </div>
+                                    {{/if}}
+
+                                    {{#if numeroSerie}}
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            NÚMERO DE SERIE</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{numeroSerie}}
+                                        </div>
+                                    </div>
+                                    {{/if}}
+                                </div>
+
+                            </div>
+                        </div>
+
+
                     </div>
+
+                    <!-- Observaciones -->
+                    <section style="text-align: initial !important;">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">DIAGNÓSTICO TÉCNICO</h6>
+                            </div>
+
+                            {{#if diagnosticoTecnico}}
+                            <div class="card-body">
+                                {{diagnosticoTecnico}}
+                            </div>
+                            {{else}}
+                            <div class="card-body">
+                                No cuenta con diagnóstico del técnico
+                            </div>
+                            {{/if}}
+
+                        </div>
+                    </section>
+
+                    <!-- Observaciones -->
+                    <section style="text-align: initial !important;">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">MOTIVO DEL DAÑO</h6>
+                            </div>
+
+                            {{#if motivoDanio}}
+                            <div class="card-body">
+                                {{motivoDanio}}
+                            </div>
+                            {{else}}
+                            <div class="card-body">
+                                No cuenta con motivo del daño
+                            </div>
+                            {{/if}}
+
+                        </div>
+                    </section>
+
 
                     <!-- Observaciones -->
                     <section style="text-align: initial !important;">
@@ -270,9 +366,17 @@
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
                             </div>
+
+                            {{#if observacion}}
                             <div class="card-body">
                                 {{observacion}}
                             </div>
+                            {{else}}
+                            <div class="card-body">
+                                No cuenta con observaciones
+                            </div>
+                            {{/if}}
+
                         </div>
                     </section>
                     <!-- recomendaciones -->

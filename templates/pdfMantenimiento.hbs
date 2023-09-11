@@ -136,10 +136,10 @@
                             </div>
                             <div class="col-11" style="text-align: center; padding: 2%;">
                                 <div class="lh-1">
-                                    <h1 class="h4 mb-0 text-black lh-1">CORPORATIVO MANTENIMIENTO COCINAS
+                                    <h1 class="h4 mb-0 text-black lh-1">CORPORATIVO MANTENIMIENTO EQUIPOS DE COCINAS
                                     </h1>
                                     <br>
-                                    <small>REVISIÓN DE EQUIPOS</small>
+                                    <small>{{tipoReporte}}</small>
                                 </div>
                             </div>
 
@@ -254,6 +254,7 @@
                                         </div>
                                         {{/if}}
                                     </div>
+                                    {{#if criticidad}}
                                     <div class="col">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             ÁREA</div>
@@ -269,6 +270,7 @@
 
 
                                     </div>
+                                    {{/if}}
 
                                     {{#if criticidad}}
                                     <div class="col">
@@ -287,6 +289,68 @@
                         </div>
 
                     </div>
+
+                    <!-- diagnosticoTecnico -->
+                    <section style="text-align: initial !important;">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Diagnóstico Técnico</h6>
+                            </div>
+
+                            {{#if diagnosticoTecnico}}
+                            <div class="card-body">
+                                {{diagnosticoTecnico}}
+                            </div>
+                            {{else}}
+                            <div class="card-body">
+                                No cuenta con Diagnóstico Técnico
+                            </div>
+                            {{/if}}
+
+                        </div>
+                    </section>
+
+                    <!-- Fallas detectadas durante el servicio -->
+                    <section style="text-align: initial !important;">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Fallas detectadas durante el servicio</h6>
+                            </div>
+
+                            {{#if fallaDetectadaDuraSer}}
+                            <div class="card-body">
+                                {{fallaDetectadaDuraSer}}
+                            </div>
+                            {{else}}
+                            <div class="card-body">
+                                No cuenta con Fallas detectadas durante el servicio
+                            </div>
+                            {{/if}}
+
+                        </div>
+                    </section>
+
+
+
+                    <!-- Comentario a la entrega del equipo -->
+                    <section style="text-align: initial !important;">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Comentario a la entrega del equipo</h6>
+                            </div>
+
+                            {{#if comentariosEntregaEquip}}
+                            <div class="card-body">
+                                {{comentariosEntregaEquip}}
+                            </div>
+                            {{else}}
+                            <div class="card-body">
+                                No cuenta con Comentario a la entrega del equipo
+                            </div>
+                            {{/if}}
+
+                        </div>
+                    </section>
 
                     <!-- Observaciones -->
                     <section style="text-align: initial !important;">

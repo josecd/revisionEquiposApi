@@ -83,7 +83,7 @@ export class HotelesService {
       },
     });
     if (!hotelFound) {
-      return new HttpException('Hotel no exontrado', HttpStatus.NOT_FOUND);
+      return new HttpException('Hotel no eontrado', HttpStatus.NOT_FOUND);
     } else {
       const updateHotel = Object.assign(hotelFound, hotel);
       return this.hotelRepositorio.save(updateHotel);
@@ -163,4 +163,18 @@ export class HotelesService {
       }
     }
   
+    async sumaContador(id: number, hotel: editarHotelDto) {
+      const hotelFound = await this.hotelRepositorio.findOne({
+        where: {
+          idHotel: id,
+        },
+      });
+      if (!hotelFound) {
+        return new HttpException('Hotel no eontrado', HttpStatus.NOT_FOUND);
+      } else {
+        const updateHotel = Object.assign(hotelFound, hotel);
+        return this.hotelRepositorio.save(updateHotel);
+      }
+    }
+
 }

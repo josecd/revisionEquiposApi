@@ -11,6 +11,8 @@ export class Observacion {
     @PrimaryGeneratedColumn()
     idObservacion: number
     @Column({nullable:true})
+    identificador: number
+    @Column({nullable:true})
     equipo: string
     @Column({nullable:true})
     marca: string
@@ -46,5 +48,47 @@ export class Observacion {
     @OneToMany(()=>ObservacionComentario,observa=>observa.observacion)
     observacionesComentario:ObservacionComentario[]
 
-    
+    @Column({nullable:true})
+    tipoReporte: string
+
+    ///Baja
+    @Column({nullable:true})
+    adquisicionEquipo: string
+
+    @Column({nullable:true}) //igual sirve para MP&MC
+    ubicacion: string
+
+    @Column({nullable:true})
+    oc: string
+
+    @Column({nullable:true})
+    sapID: string
+
+    @Column({length: 2500, nullable:true}) //igual sirve para MP&MC
+    diagnosticoTecnico: string
+
+    @Column({length: 2500, nullable:true})
+    motivoDanio: string
+
+
+    /// MTT P&C
+    @Column({nullable:true})
+    fechaInicio: string
+
+    @Column({nullable:true})
+    fechaFinaliza: string
+
+    @Column({nullable:true})
+    tecEsp: string
+
+    @Column({length: 2500, nullable:true})
+    fallaDetectadaDuraSer: string
+
+    @Column({length: 2500, nullable:true})
+    comentariosEntregaEquip: string
+
+
+
+  
+
 }
