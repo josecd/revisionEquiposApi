@@ -1,6 +1,7 @@
 
 export class editarHotelDto {
-    nombre: string
+    nombre?: string;
+    contador?:number;
 }
 
 

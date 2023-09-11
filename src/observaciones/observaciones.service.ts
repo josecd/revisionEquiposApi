@@ -15,6 +15,7 @@ import { UsersService } from 'src/users/users.service';
 import { crearComentarioObsDto } from './dto/crear-comentario.dto';
 
 import * as path from 'path';
+import { HotelesService } from 'src/hoteles/hoteles.service';
 @Injectable()
 export class ObservacionesService {
   constructor(
@@ -32,6 +33,7 @@ export class ObservacionesService {
     @Inject(forwardRef(() => ReportesService)) private readonly _reporte: ReportesService,
     private _user: UsersService,
 
+    private _hotel: HotelesService
 
   ) { }
 
@@ -43,7 +45,11 @@ export class ObservacionesService {
     if (!reportFound) {
       return new HttpException('Reporte no encontrado', HttpStatus.NOT_FOUND);
     }
-
+    const hotelFound = await this._hotel.listarHotelPorID(reportFound.hotelId)
+    const sumar = hotelFound['contador'] + 1
+    observacion.identificador = sumar
+    this._hotel.sumaContador(reportFound.hotelId, { contador: sumar })
+    observacion.tipoReporte = reportFound.tipoReporte;
     const newObservacion = this.observacionRepositorio.create(observacion);
     const saveObservacion = await this.observacionRepositorio.save(newObservacion);
     newObservacion.reporte = reportFound;
@@ -113,7 +119,7 @@ export class ObservacionesService {
       );
 
       await Promise.all(files.map(async (element) => {
-        const path = `${observacion.reporteId}/observacion/` + this._up.returnNameDateType(element['mimetype']);
+        const path = `reportes/${observacion.reporteId}/observacion/` + this._up.returnNameDateType(element['mimetype']);
         const imgBucket = await this._up.upPublicFile(element.buffer, path);
 
         imgObs.url = imgBucket.Location;

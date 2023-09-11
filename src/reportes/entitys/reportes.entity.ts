@@ -19,6 +19,10 @@ export class Reportes {
     esActivo: string
     @Column({default: '1'})
     estado: string
+
+    @Column({nullable:true})
+    tipoReporte: string
+    
     @Column({type:'datetime',default:()=>'CURRENT_TIMESTAMP'}) 
     fechaRegistro: Date
 

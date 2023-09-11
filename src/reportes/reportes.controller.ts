@@ -76,7 +76,7 @@ export class ReportesController {
     }
 
     @Get('pdf/view/:id/Mantenimiento')
-    @Render('pdf.hbs')
+    @Render('pdfMantenimiento.hbs')
     async root3(@Param('id', ParseIntPipe) id: number) {
         const data = await this._reportes.listarReportePorIdTodaLaInfo(id);
         const informacion = data[0]

@@ -8,6 +8,18 @@ export class editarObservacionDto {
     area?: string
     observacion?:string;
     criticidad?:string;
+    //Baja
+    adquisicionEquipo?:string;
+    ubicacion?:string;
+    oc?:string;
+    sapID?:string;
+    diagnosticoTecnico?:string;
+    motivoDanio?:string;
+    //MTT P&C
+    fechaInicio?:string;
+    fechaFinaliza?:string;
+    fallaDetectadaDuraSer?:string;
+    comentariosEntregaEquip?:string;
 }
 
 

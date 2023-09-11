@@ -15,10 +15,10 @@ export class User {
     clave: string
     @Column({default: '1'})
     esActivo: string
+
     @Column({type:'datetime',default:()=>'CURRENT_TIMESTAMP'}) 
     fechaRegistro: Date
 
-    
     @OneToMany(()=>Reportes,reporte=>reporte.usuario)
     reportes:Reportes[]
 

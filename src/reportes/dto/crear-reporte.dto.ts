@@ -4,6 +4,7 @@ export class crearReporteDto {
     recomendaciones?: string
     hotelId?:number;
     userId?:number;
+    tipoReporte?:string;
 }
 
 

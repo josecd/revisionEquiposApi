@@ -8,6 +8,8 @@ export class Hoteles {
     idHotel: number
     @Column()
     nombre: string
+    @Column({nullable:true})
+    contador: number
     @Column({default: '1'})
     esActivo: string
     @Column({default: '1'})
