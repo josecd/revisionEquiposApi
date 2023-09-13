@@ -12,6 +12,8 @@ import * as  process from "process";
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { OpenaiService } from './services/openai/openai.service';
+import { InventarioModule } from './inventario/inventario/inventario.module';
+import { ParteModule } from './inventario/parte/parte.module';
 
 @Module({
   imports: [
@@ -36,6 +38,8 @@ import { OpenaiService } from './services/openai/openai.service';
       synchronize:true
     }),
     AuthModule,
+    InventarioModule,
+    ParteModule,
   ],
   controllers: [AppController],
   providers: [AppService, UploadFileS3Service, OpenaiService],

@@ -1,6 +1,7 @@
 import { Entity,Column,PrimaryGeneratedColumn,OneToOne ,JoinColumn ,OneToMany} from "typeorm";
 import { TrabajadoresHotel } from "./trabajador-hotel.entity";
 import { Reportes } from "src/reportes/entitys/reportes.entity";
+import { Inventarios } from "src/inventario/inventario/entities/inventario.entity";
 
 @Entity({name:'hoteles'})
 export class Hoteles {
@@ -20,5 +21,6 @@ export class Hoteles {
     trabajadores:TrabajadoresHotel[]
     @OneToMany(()=>Reportes,reporte=>reporte.hoteles)
     reportes:Reportes[]
-    
+    @OneToMany(()=>Inventarios,reporte=>reporte.hoteles)
+    inventarios:Inventarios[]
 }
