@@ -1,7 +1,8 @@
 import { Inventarios } from "src/inventario/inventario/entities/inventario.entity";
 import {
     Entity, Column, PrimaryGeneratedColumn,
-    OneToOne, JoinColumn, OneToMany, ManyToOne, JoinTable
+    OneToOne, JoinColumn, OneToMany, ManyToOne, JoinTable,
+    MaxKey
 } from "typeorm";
 import { ParteImagen } from "./parte-imagen.entity";
 
@@ -13,9 +14,9 @@ export class Parte {
 
     @Column({ nullable: true })
     descripcion: string
-    @Column({ nullable: true })
+    @Column('int', {nullable: true,width: 50 })
     noParte: number
-    @Column({ nullable: true })
+    @Column('int', {nullable: true,width: 50 })
     cantidad: number
 
 
