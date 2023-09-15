@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HotelesService } from 'src/hoteles/hoteles.service';
 import { UsersService } from 'src/users/users.service';
+import { log } from 'console';
 
 @Injectable()
 export class InventarioService {
@@ -55,8 +56,38 @@ export class InventarioService {
       where: {
         esActivo: '1',
       },
+
     })
   }
+
+ async  findAllFilter(filter) {
+    let queryData = ''
+    if (filter?.hotel) {
+      queryData = `MONTH(inventario.fechaRegistro) = ${filter?.mes} AND YEAR(inventario.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel})`
+    } else {
+      queryData = `MONTH(inventario.fechaRegistro) = ${filter?.mes} AND YEAR(inventario.fechaRegistro) = ${filter?.anio}`
+    }
+    const queryView = await this.invnetarioRepositorio
+    .createQueryBuilder('inventario')
+    .where(queryData)
+    .leftJoinAndSelect('inventario.hoteles', 'hoteles')
+    .leftJoinAndSelect('inventario.usuario', 'usuario')
+    .leftJoinAndSelect('inventario.partes', 'partes')
+    .leftJoinAndSelect('partes.partesImagen', 'partesImagen')
+    .getMany();
+    
+    return queryView
+    // this.invnetarioRepositorio.find({
+    //   relations: ['hoteles', 'usuario','partes','partes.partesImagen'],
+    //   order: { fechaRegistro: 'DESC' },
+    //   where: {
+    //     esActivo: '1',
+        
+    //   },
+    // })
+
+  }
+
 
   async findOne(id: number) {
     const reporteFound = await this.invnetarioRepositorio.findOne({
