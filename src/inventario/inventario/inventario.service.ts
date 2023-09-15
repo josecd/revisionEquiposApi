@@ -70,6 +70,7 @@ export class InventarioService {
     const queryView = await this.invnetarioRepositorio
     .createQueryBuilder('inventario')
     .where(queryData)
+    .andWhere("inventario.esActivo = '1' ")
     .leftJoinAndSelect('inventario.hoteles', 'hoteles')
     .leftJoinAndSelect('inventario.usuario', 'usuario')
     .leftJoinAndSelect('inventario.partes', 'partes')
