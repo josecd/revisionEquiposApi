@@ -8,7 +8,11 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HotelesService } from 'src/hoteles/hoteles.service';
 import { UsersService } from 'src/users/users.service';
-import { log } from 'console';
+
+const fs = require('fs')
+const path = require('path')
+const puppeteer = require('puppeteer')
+const hbs = require('handlebars')
 
 @Injectable()
 export class InventarioService {
@@ -58,6 +62,22 @@ export class InventarioService {
       },
 
     })
+  }
+
+  async findAll2() {
+    const data = await this.invnetarioRepositorio.find({
+      relations: ['hoteles', 'usuario','partes','partes.partesImagen'],
+      order: { fechaRegistro: 'DESC' },
+      where: {
+        esActivo: '1',
+      },
+
+    })
+    const ret = {
+      response:null
+    }
+    ret.response=data
+    return ret
   }
 
  async  findAllFilter(filter) {
@@ -144,5 +164,44 @@ export class InventarioService {
       const updateReporte = Object.assign(invnetarioFound, {esActivo:0});
       return this.invnetarioRepositorio.save(updateReporte);
     }
+  }
+
+  async generatepdfHtml(info: any) {
+    const browser = await puppeteer.launch({
+      headless: 'new',
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        "--headless=new",
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process',
+        '--disable-gpu'
+      ],
+
+    });
+
+    const page = await browser.newPage();
+    const filePath = path.join(process.cwd(), 'templates', 'pdfinventario.hbs');;
+    const html = await fs.readFileSync(filePath, 'utf-8');
+    const content = hbs.compile(html)(info);
+    await page.setContent(content);
+    const buffer = await page.pdf({
+      printBackground: true,
+      margin: {
+        left: '10mm',
+        top: '10mm',
+        right: '10mm',
+        bottom: '10mm',
+      },
+      format: 'Tabloid',
+    });
+
+    await browser.close();
+    return buffer;
+    process.exit();
+
   }
 }
