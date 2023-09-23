@@ -19,7 +19,7 @@ export class InventarioService {
 
   constructor(
     @InjectRepository(Inventarios)
-    private invnetarioRepositorio: Repository<Inventarios>,
+    private inventarioRepositorio: Repository<Inventarios>,
 
     private _user: UsersService,
     private _hotel: HotelesService,
@@ -42,19 +42,19 @@ export class InventarioService {
       return new HttpException('Hotel no encontrado', HttpStatus.NOT_FOUND);
     }
 
-    const newInventario = this.invnetarioRepositorio.create(createInventarioDto);
+    const newInventario = this.inventarioRepositorio.create(createInventarioDto);
 
-    const saveInventario = await this.invnetarioRepositorio.save(newInventario);
+    const saveInventario = await this.inventarioRepositorio.save(newInventario);
 
     newInventario.usuario = userFound;
     newInventario.hoteles = hotelFound;
 
-    return this.invnetarioRepositorio.save(saveInventario);
+    return this.inventarioRepositorio.save(saveInventario);
 
   }
 
   findAll() {
-    return this.invnetarioRepositorio.find({
+    return this.inventarioRepositorio.find({
       relations: ['hoteles', 'usuario','partes','partes.partesImagen'],
       order: { fechaRegistro: 'DESC' },
       where: {
@@ -65,7 +65,7 @@ export class InventarioService {
   }
 
   async findAll2() {
-    const data = await this.invnetarioRepositorio.find({
+    const data = await this.inventarioRepositorio.find({
       relations: ['hoteles', 'usuario','partes','partes.partesImagen'],
       order: { fechaRegistro: 'DESC' },
       where: {
@@ -87,7 +87,7 @@ export class InventarioService {
     } else {
       queryData = `MONTH(inventario.fechaRegistro) = ${filter?.mes} AND YEAR(inventario.fechaRegistro) = ${filter?.anio}`
     }
-    const queryView = await this.invnetarioRepositorio
+    const queryView = await this.inventarioRepositorio
     .createQueryBuilder('inventario')
     .where(queryData)
     .orderBy('inventario.fechaRegistro', 'DESC')
@@ -99,7 +99,7 @@ export class InventarioService {
     .getMany();
     
     return queryView
-    // this.invnetarioRepositorio.find({
+    // this.inventarioRepositorio.find({
     //   relations: ['hoteles', 'usuario','partes','partes.partesImagen'],
     //   order: { fechaRegistro: 'DESC' },
     //   where: {
@@ -112,7 +112,7 @@ export class InventarioService {
 
 
   async findOne(id: number) {
-    const reporteFound = await this.invnetarioRepositorio.findOne({
+    const reporteFound = await this.inventarioRepositorio.findOne({
       where: {
         idInventario: id,
         esActivo: '1',
@@ -128,7 +128,7 @@ export class InventarioService {
   }
 
   async findOneException(id: number) {
-    const reporteFound = await this.invnetarioRepositorio.findOne({
+    const reporteFound = await this.inventarioRepositorio.findOne({
       where: {
         idInventario: id,
         esActivo: '1',
@@ -139,7 +139,7 @@ export class InventarioService {
   }
 
   async update(id: number, updateInventarioDto: UpdateInventarioDto) {
-    const invnetarioFound = await this.invnetarioRepositorio.findOne({
+    const invnetarioFound = await this.inventarioRepositorio.findOne({
       where: {
         idInventario: id,
       },
@@ -148,12 +148,12 @@ export class InventarioService {
       return new HttpException('Inventario no encontrado', HttpStatus.NOT_FOUND);
     } else {
       const updateReporte = Object.assign(invnetarioFound, updateInventarioDto);
-      return this.invnetarioRepositorio.save(updateReporte);
+      return this.inventarioRepositorio.save(updateReporte);
     }
   }
 
   async remove(id: number) {
-    const invnetarioFound = await this.invnetarioRepositorio.findOne({
+    const invnetarioFound = await this.inventarioRepositorio.findOne({
       where: {
         idInventario: id,
       },
@@ -162,7 +162,7 @@ export class InventarioService {
       return new HttpException('Inventario no encontrado', HttpStatus.NOT_FOUND);
     } else {
       const updateReporte = Object.assign(invnetarioFound, {esActivo:0});
-      return this.invnetarioRepositorio.save(updateReporte);
+      return this.inventarioRepositorio.save(updateReporte);
     }
   }
 

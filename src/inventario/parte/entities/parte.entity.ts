@@ -14,8 +14,8 @@ export class Parte {
 
     @Column({ nullable: true })
     descripcion: string
-    @Column('bigint', {nullable: true,width: 50 })
-    noParte: number
+    @Column( {nullable: true })
+    noParte: string
     @Column('bigint', {nullable: true,width: 50 })
     cantidad: number
 

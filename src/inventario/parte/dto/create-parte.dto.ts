@@ -1,6 +1,6 @@
 export class CreateParteDto {
     descripcion?: string
-    noParte?: number
+    noParte?: string
     cantidad?: number
     inventarioId?:number
     userId?:number
