@@ -290,6 +290,89 @@
 
                     </div>
 
+                    <div style="text-align: center !important;">
+
+                        <div class="card shadow mb-4">
+                            <div class="card-body">
+                                <div class="row"
+                                    class="d-flex align-items-center p-3 my-3 text-black bg-purple rounded shadow-sm row">
+
+                                    {{#if ubicacion}}
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            ubicación</div>
+                                        {{#if ubicacion}}
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{ubicacion}}
+                                        </div>
+                                        {{else}}
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            S/A
+                                        </div>
+                                        {{/if}}
+                                    </div>
+                                    {{/if}}
+
+
+
+                                    {{#if tecEsp}}
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Técnico Especialista</div>
+                                        {{#if tecEsp}}
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{tecEsp}}
+                                        </div>
+                                        {{else}}
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            S/T
+                                        </div>
+                                        {{/if}}
+                                    </div>
+                                    {{/if}}
+
+
+
+                                    {{#if fechaInicio}}
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            INICIA</div>
+                                        {{#if fechaInicio}}
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{fechaInicio}}
+                                        </div>
+                                        {{else}}
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            S/F
+                                        </div>
+                                        {{/if}}
+                                    </div>
+                                    {{/if}}
+
+                                    {{#if fechaFinaliza}}
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            FINALIZA</div>
+                                        {{#if fechaFinaliza}}
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{fechaFinaliza}}
+                                        </div>
+                                        {{else}}
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            S/F
+                                        </div>
+                                        {{/if}}
+                                    </div>
+                                    {{/if}}
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
                     <!-- diagnosticoTecnico -->
                     <section style="text-align: initial !important;">
                         <div class="card shadow mb-4">
