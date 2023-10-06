@@ -11,7 +11,7 @@ export class OpenaiService {
     constructor() {
         const configuration = new Configuration({
             apiKey: process.env.API_OPEN,
-            organization: 'org-5F6cEvWbXdDPnR5D2XMjezjV'
+            organization: 'org-lVxfxiwp2dVwNH5YV4U66gL2'
         })
         this.openai = new OpenAIApi(configuration);
     }
