@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Render, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Render, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ReportesService } from './reportes.service';
 import { crearReporteDto } from './dto/crear-reporte.dto';
 import { editarReporteDto } from './dto/editar-reporte.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { crearFirmaDto } from './dto/crear-firmas.dto';
 import * as moment from "moment";
-
+import { AuthGuard } from 'src/auth/auth.guard';
+@UseGuards(AuthGuard)
 @Controller('reportes')
 export class ReportesController {
 
@@ -15,12 +16,10 @@ export class ReportesController {
     ) {
 
     }
-
     @Get()
     listarReportes() {
         return this._reportes.listarReportes();
     }
-
     @Get(':id')
     listarUsuario(@Param('id', ParseIntPipe) id: number) {
         return this._reportes.listarReportePorIdTodaLaInfo(id);
