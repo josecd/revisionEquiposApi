@@ -7,7 +7,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { crearFirmaDto } from './dto/crear-firmas.dto';
 import * as moment from "moment";
 import { AuthGuard } from 'src/auth/auth.guard';
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 @Controller('reportes')
 export class ReportesController {
 

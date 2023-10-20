@@ -5,7 +5,7 @@ import { CreateInventarioDto } from './dto/create-inventario.dto';
 import { UpdateInventarioDto } from './dto/update-inventario.dto';
 import * as moment from "moment";
 import { AuthGuard } from 'src/auth/auth.guard';
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 @Controller('inventario')
 export class InventarioController {
   constructor(private readonly inventarioService: InventarioService) {}
