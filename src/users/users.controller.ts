@@ -61,4 +61,11 @@ export class UsersController {
         return new HttpException(info, HttpStatus.ACCEPTED)
     }
 
+    @Post('scheduleactiva')
+    async scheduleActiva(@Body() mensaje) {
+       console.log("schedule desde google cloud",mensaje);
+       return new HttpException(mensaje, HttpStatus.ACCEPTED)
+    }
+
+
 }
