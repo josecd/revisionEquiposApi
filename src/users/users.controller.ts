@@ -66,6 +66,11 @@ export class UsersController {
        console.log("schedule desde google cloud",mensaje);
        return new HttpException(mensaje, HttpStatus.ACCEPTED)
     }
+    @Post('testbot')
+    async testUid(@Body() mensaje) {
+       console.log("schedule desde google cloud",mensaje);
+       return new HttpException({user_id:1819}, HttpStatus.ACCEPTED)
+    }
 
 
 }
