@@ -57,6 +57,9 @@ export class ReportesService {
 
   listarReportes() {
     return this.reporteRepositorio.find({
+      where: {
+        esActivo:'1',
+      },
       relations: ['hoteles', 'usuario'],
       order: { fechaRegistro: 'DESC' }
     });
