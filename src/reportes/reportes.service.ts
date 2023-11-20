@@ -123,9 +123,9 @@ export class ReportesService {
   async listarReportesFiltros(filter) {
     let queryData = ''
     if (filter?.hotel) {
-      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel})`
+      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel}) AND reportes.esActivo = 1`
     } else {
-      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio}`
+      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio}  AND reportes.esActivo = 1`
     }
     const queyView = await this.reporteRepositorio
       .createQueryBuilder('reportes')
@@ -145,9 +145,9 @@ export class ReportesService {
   async listarReportesFiltros2(filter) {
     let queryData = ''
     if (filter?.hotel) {
-      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel})`
+      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel}) AND reportes.esActivo = 1`
     } else {
-      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio}`
+      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND reportes.esActivo = 1`
     }
     const queyView = await this.reporteRepositorio
       .createQueryBuilder('reportes')
@@ -167,9 +167,9 @@ export class ReportesService {
   async listarReportesFiltrosMobile(filter) {
     let queryData = ''
     if (filter?.hotel) {
-      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel})`
+      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel}) AND reportes.esActivo = 1`
     } else {
-      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio}`
+      queryData = `MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND reportes.esActivo = 1`
     }
     const queyView = await this.reporteRepositorio
       .createQueryBuilder('reportes')
@@ -219,6 +219,7 @@ export class ReportesService {
     const userFound = await this.reporteRepositorio.findOne({
       where: {
         idReporte: id,
+        esActivo: "1"
       },
     });
     return userFound;
