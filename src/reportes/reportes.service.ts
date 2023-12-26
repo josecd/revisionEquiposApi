@@ -503,6 +503,7 @@ export class ReportesService {
             '--disable-setuid-sandbox',
             "--headless=new"
           ],
+          timeout: 180000,
 
         }
       );
@@ -556,7 +557,7 @@ export class ReportesService {
         }
       });
 
-      const html = await fs.readFileSync(filePath, 'utf-8');
+      const html = await fs.promises.readFile(filePath, 'utf-8');
       const content = hbs.compile(html)(data);
       await page.setContent(content);
 
@@ -596,7 +597,7 @@ export class ReportesService {
         '--single-process',
         '--disable-gpu'
       ],
-
+      timeout: 180000,
     });
 
     // Create a new page
@@ -612,18 +613,11 @@ export class ReportesService {
     // }
     const page = await browser.newPage();
     const filePath = path.join(process.cwd(), 'templates', 'pdf.hbs');;
-    const html = await fs.readFileSync(filePath, 'utf-8');
+    const html = await fs.promises.readFile(filePath, 'utf-8');
+
     const content = hbs.compile(html)(info);
     await page.setContent(content);
     const buffer = await page.pdf({
-      // path: 'output-abc.pdf',
-      //   displayHeaderFooter: true,
-      //   headerTemplate:'',
-      //   footerTemplate: `
-      //   <div style="color: lightgray; border-top: solid lightgray 1px; font-size: 10px; padding-top: 5px; text-align: center; width: 100%;">
-      //   <span>This is a test message</span> - <span class="pageNumber"></span>
-      // </div>
-      // `,
       printBackground: true,
       margin: {
         left: '10mm',
