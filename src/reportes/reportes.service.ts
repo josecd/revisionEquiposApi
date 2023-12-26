@@ -646,7 +646,7 @@ export class ReportesService {
         
     // Create a browser instance
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: "new",
       executablePath: process.env.CHROMIUM_PATH,
       args: [
         '--no-sandbox',
