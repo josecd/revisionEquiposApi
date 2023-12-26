@@ -660,6 +660,7 @@ export class ReportesService {
         '--single-process',
         '--disable-gpu'
       ],
+      
     });
 
     // Create a new page
@@ -695,7 +696,7 @@ export class ReportesService {
         bottom: '10mm',
       },
       format: 'Tabloid',
-
+      quality: 75, // Ajusta este valor según sea necesario
     });
 
     await browser.close();
