@@ -639,73 +639,64 @@ export class ReportesService {
     process.exit();
 
   }
-  async generatepdfHtml2(info: any,tipo:any) {
-
+  async generatepdfHtml2(info: any, tipo: any) {
     try {
-        
-    // Create a browser instance test
-    const browser = await puppeteer.launch({
-      headless: "new",
-      executablePath: process.env.CHROMIUM_PATH,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        "--headless=new",
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--no-first-run',
-        '--no-zygote',
-        '--single-process',
-        '--disable-gpu'
-      ],
-      timeout: 180000,
-
-    });
-
-    // Create a new page
-    console.log(tipo);
-    
-    let templatTipo= ''
-    if (tipo =='Recorrido') {
-      templatTipo = 'pdf.hbs'
-    }else if (tipo =='Baja') {
-      templatTipo = 'pdfBaja.hbs'
-    }else if (tipo =='Mantenimiento') {
-      templatTipo = 'pdfMantenimiento.hbs'
-    }
-    const page = await browser.newPage();
-    const filePath = path.join(process.cwd(), 'templates', templatTipo);;
-    const html = await fs.readFileSync(filePath, 'utf-8');
-    const content = hbs.compile(html)(info);
-    await page.setContent(content);
-    const buffer = await page.pdf({
-      // path: 'output-abc.pdf',
-      //   displayHeaderFooter: true,
-      //   headerTemplate:'',
-      //   footerTemplate: `
-      //   <div style="color: lightgray; border-top: solid lightgray 1px; font-size: 10px; padding-top: 5px; text-align: center; width: 100%;">
-      //   <span>This is a test message</span> - <span class="pageNumber"></span>
-      // </div>
-      // `,
-      printBackground: true,
-      margin: {
-        left: '10mm',
-        top: '10mm',
-        right: '10mm',
-        bottom: '10mm',
-      },
-      format: 'Tabloid',
-    });
-
-    await browser.close();
-    return buffer;
+      const browser = await puppeteer.launch({
+        headless: true,
+        executablePath: process.env.CHROMIUM_PATH,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--single-process',
+          '--disable-gpu'
+        ],
+        timeout: 180000,
+      });
+  
+      const templatTipo = this.getTemplateType(tipo);
+      const filePath = path.join(process.cwd(), 'templates', templatTipo);
+      
+      // Usa lectura de archivos asincrónica
+      const html = await fs.promises.readFile(filePath, 'utf-8');
+  
+      const page = await browser.newPage();
+      const content = hbs.compile(html)(info);
+      await page.setContent(content);
+  
+      const buffer = await page.pdf({
+        printBackground: true,
+        margin: {
+          left: '10mm',
+          top: '10mm',
+          right: '10mm',
+          bottom: '10mm',
+        },
+        format: 'Tabloid',
+      });
+  
+      await browser.close();
+      return buffer;
     } catch (error) {
       console.error('Error en Puppeteer:', error);
+      throw error; // Vuelve a lanzar el error para propagarlo más si es necesario
     }
-
-
-
   }
-
+  
+   getTemplateType(tipo: string): string {
+    if (tipo === 'Recorrido') {
+      return 'pdf.hbs';
+    } else if (tipo === 'Baja') {
+      return 'pdfBaja.hbs';
+    } else if (tipo === 'Mantenimiento') {
+      return 'pdfMantenimiento.hbs';
+    }
+    // Por defecto, usa una plantilla genérica si el tipo no es reconocido
+    return 'plantillaPorDefecto.hbs';
+  }
+  
 
 }
