@@ -641,9 +641,12 @@ export class ReportesService {
 
   }
   async generatepdfHtml2(info: any,tipo:any) {
+
+    try {
+        
     // Create a browser instance
     const browser = await puppeteer.launch({
-      headless: 'new',
+      headless: true,
       executablePath: process.env.CHROMIUM_PATH,
       args: [
         '--no-sandbox',
@@ -696,7 +699,11 @@ export class ReportesService {
 
     await browser.close();
     return buffer;
-    process.exit();
+    } catch (error) {
+      console.error('Error en Puppeteer:', error);
+    }
+
+
 
   }
 

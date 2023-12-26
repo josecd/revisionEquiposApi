@@ -364,7 +364,7 @@
                                 {{#each imagenes}}
                                 <div class="col">
                                     <img style="height: auto; width: auto; max-width: 300px; max-height: 300px;"
-                                        src="{{url}}" alt="img" />
+                                        src="{{url}}" alt="img" loading="lazy" />
                                 </div>
                                 {{/each}}
                                 {{else}}
@@ -463,6 +463,7 @@
                                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                         {{nombreFirma}}
                                                         <img style="  object-fit: cover;
+                                                        loading="lazy"
                                                         width:100%;
                                                         height:100%;" src="{{url}}" alt="">
 
