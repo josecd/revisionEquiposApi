@@ -695,6 +695,8 @@ export class ReportesService {
         bottom: '10mm',
       },
       format: 'Tabloid',
+      quality: 40, // Ajusta según tus necesidades
+      scale: 0.8, // Ajusta según tus necesidades
     });
 
     await browser.close();
