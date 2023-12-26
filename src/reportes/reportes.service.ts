@@ -408,6 +408,7 @@ export class ReportesService {
       // we are using headless mode
       const browser = await puppeteer.launch(
         {
+          protocolTimeout: 30000, // Increase timeout to 30 seconds
           add_argument: ("--headless=new"),
           args: [
             "--no-sandbox",
@@ -430,6 +431,7 @@ export class ReportesService {
   async generatepdf33() {
     // Create a browser instance
     const browser = await puppeteer.launch({
+      protocolTimeout: 30000, // Increase timeout to 30 seconds
       headless: 'new',
       executablePath: process.env.CHROMIUM_PATH,
       args: ['--no-sandbox',
@@ -498,8 +500,10 @@ export class ReportesService {
     try {
       const browser = await puppeteer.launch(
         {
+          protocolTimeout: 30000, // Increase timeout to 30 seconds
           headless: 'new',
           executablePath: process.env.CHROMIUM_PATH,
+          // executablePath: "",
           args: ['--no-sandbox',
             '--disable-setuid-sandbox',
             "--headless=new"
@@ -584,6 +588,7 @@ export class ReportesService {
   async generatepdfHtml(info: any) {
     // Create a browser instance
     const browser = await puppeteer.launch({
+      protocolTimeout: 30000, // Increase timeout to 30 seconds
       headless: 'new',
       executablePath: process.env.CHROMIUM_PATH,
       args: [
@@ -643,6 +648,7 @@ export class ReportesService {
   async generatepdfHtml2(info: any,tipo:any) {
     // Create a browser instance
     const browser = await puppeteer.launch({
+      protocolTimeout: 30000, // Increase timeout to 30 seconds
       headless: 'new',
       executablePath: process.env.CHROMIUM_PATH,
       args: [
