@@ -660,7 +660,7 @@ export class ReportesService {
         '--single-process',
         '--disable-gpu'
       ],
-      timeout: 180000,
+      // timeout: 180000,
     });
 
     // Create a new page
