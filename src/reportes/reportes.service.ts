@@ -429,7 +429,6 @@ export class ReportesService {
   async generatepdf33() {
     // Create a browser instance
     const browser = await puppeteer.launch({
-      headless: 'new',
       executablePath: process.env.CHROMIUM_PATH,
       args: ['--no-sandbox',
         '--disable-setuid-sandbox',
@@ -497,7 +496,6 @@ export class ReportesService {
     try {
       const browser = await puppeteer.launch(
         {
-          headless: 'new',
           // executablePath: "",
           args: ['--no-sandbox',
             '--disable-setuid-sandbox',
@@ -584,7 +582,6 @@ export class ReportesService {
   async generatepdfHtml(info: any) {
     // Create a browser instance
     const browser = await puppeteer.launch({
-      headless: 'new',
       executablePath: process.env.CHROMIUM_PATH,
       args: [
         '--no-sandbox',
