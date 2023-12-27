@@ -636,7 +636,6 @@ export class ReportesService {
   async generatepdfHtml2(info: any, tipo: any) {
     try {
       const browser = await puppeteer.launch({
-        headless: "new",
         executablePath: process.env.CHROMIUM_PATH,
         args: [
           '--no-sandbox',
