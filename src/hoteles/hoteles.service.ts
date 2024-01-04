@@ -10,11 +10,16 @@ import { UsersService } from 'src/users/users.service';
 import { editarEstadoHotelDto } from './dto/cambiar-estado.dto';
 import { log } from 'console';
 import { editarTrabajadorDto } from './dto/editar-trabajador.dto';
+import { hotelContadorBackup } from './entitys/hotel-contador-backup.entity';
+import { backupHotelContadorDto } from './dto/backup-contador-hotel.dto';
+import { backupHotelContadorPostDto } from './dto/backup-contador-hotel-post.dto';
 
 @Injectable()
 export class HotelesService {
   constructor(
     @InjectRepository(Hoteles) private hotelRepositorio: Repository<Hoteles>,
+    @InjectRepository(hotelContadorBackup) private hotelContadorBackupRepositorio: Repository<hotelContadorBackup>,
+
     @InjectRepository(TrabajadoresHotel)
     private trabajadorHotelRepositorio: Repository<TrabajadoresHotel>,
     private _user: UsersService,
@@ -175,6 +180,22 @@ export class HotelesService {
         const updateHotel = Object.assign(hotelFound, hotel);
         return this.hotelRepositorio.save(updateHotel);
       }
+    }
+
+    async hotelContadorBackup(newBackup:backupHotelContadorPostDto){
+      const hoteles = await this.hotelRepositorio.find();
+      hoteles.forEach(async (element) => {
+        const dato:backupHotelContadorDto={
+          nombre:element.nombre,
+          idHotel:element.idHotel,
+          contador:element.contador,
+          mes: newBackup.mes,
+          anio: newBackup.anio
+        }
+          const newHotel = await  this.hotelContadorBackupRepositorio.create(dato);
+          const saveHotel = await this.hotelContadorBackupRepositorio.save(newHotel);
+          this.sumaContador(element.idHotel,{contador:0})
+      });
     }
 
 }

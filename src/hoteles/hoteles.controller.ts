@@ -75,5 +75,9 @@ export class HotelesController {
         return this._hotel.cambiarEstadoTrabajador(id,estado);
     }
 
+    @Post("backup-hotel")
+    backupContadorHotel(@Body() newBackup){
+        return this._hotel.hotelContadorBackup(newBackup);
+    }
 
 }

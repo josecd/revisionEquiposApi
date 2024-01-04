@@ -35,7 +35,7 @@ import { ParteModule } from './inventario/parte/parte.module';
       password:process.env.PASSWORD_BD,
       database:'apirevision',
       entities:[__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize:true
+      // synchronize:true
     }),
     AuthModule,
     InventarioModule,
