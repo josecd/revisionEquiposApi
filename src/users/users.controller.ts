@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Patch, Post, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Patch, Post, Render, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { User } from 'src/users/entitiys/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { createUserDto } from './dto/create-user.dto';
@@ -19,6 +19,12 @@ export class UsersController {
     @Get()
     listarUsuarios(): Promise<User[]> {
         return this._user.listarUsuario();
+    }
+
+    @Get('privacidad')
+    @Render('privacidad.hbs')
+    async root() {
+        return
     }
 
     @Get(':id')
