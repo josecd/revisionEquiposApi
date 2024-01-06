@@ -296,6 +296,19 @@ export class ReportesService {
       return new HttpException('Reporte eliminado', HttpStatus.ACCEPTED)
     }
   }
+  async desactivarReporte(id){
+    const reportFound = await this.reporteRepositorio.findOne(
+      {
+        where: {
+          idReporte:id
+        },
+      }
+    )
+    const updateReporte = Object.assign(reportFound, {esActivo:"0",estado:"0"});
+    const save = await this.reporteRepositorio.save(updateReporte)
+    console.log("idFirmar", reportFound);
+    return save
+  }
 
   async crearFirma(firma: crearFirmaDto, file) {
     const reporteFound = await this.listarReportePorIdSinExecption(

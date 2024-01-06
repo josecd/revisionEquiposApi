@@ -38,7 +38,7 @@ export class ReportesController {
 
     @Delete(':id')
     deleteUser(@Param('id', ParseIntPipe) id: number) {
-        return this._reportes.eliminarReporte(id);
+        return this._reportes.desactivarReporte(id);
     }
 
     @Patch(':id')
