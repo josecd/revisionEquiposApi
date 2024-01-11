@@ -31,6 +31,9 @@ export class Observacion {
     @Column({type:'datetime',default:()=>'CURRENT_TIMESTAMP'}) 
     fechaRegistro: Date
 
+    @Column({nullable:true,default: false}) /*nullable sirve para poder decir que puede ser null */
+    fimaConformidad: boolean
+
     @Column({nullable:true}) /*nullable sirve para poder decir que puede ser null */
     reporteId: number
 

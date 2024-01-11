@@ -306,7 +306,6 @@ export class ReportesService {
     )
     const updateReporte = Object.assign(reportFound, {esActivo:"0",estado:"0"});
     const save = await this.reporteRepositorio.save(updateReporte)
-    console.log("idFirmar", reportFound);
     return save
   }
 
