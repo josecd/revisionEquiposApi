@@ -7,6 +7,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { crearFirmaDto } from './dto/crear-firmas.dto';
 import * as moment from "moment";
 import { AuthGuard } from 'src/auth/auth.guard';
+import { crearFirmaObsDto } from './dto/crear-firmas-obs.dto';
 // @UseGuards(AuthGuard)
 @Controller('reportes')
 export class ReportesController {
@@ -52,6 +53,13 @@ export class ReportesController {
         return this._reportes.crearFirma(newFirma, file)
     }
 
+    @Post('obs/firma')
+    @UseInterceptors(FileInterceptor('file'))
+    crearFirmaDeObs(@UploadedFile() file, @Body() newFirma: crearFirmaObsDto) {
+        return this._reportes.crearFirmaObs(newFirma, file)
+    }
+
+
     @Post('firmaEliminar')
     eliminarFirmaDeReporte(@Body() firma: any) {
         return this._reportes.eliminarFirma(firma.idFirmaReporte, firma.path)
@@ -79,6 +87,8 @@ export class ReportesController {
     async root3(@Param('id', ParseIntPipe) id: number) {
         const data = await this._reportes.listarReportePorIdTodaLaInfo(id);
         const informacion = data[0]
+        console.log(informacion);
+        
         return informacion;
     }
 

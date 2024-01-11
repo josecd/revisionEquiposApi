@@ -10,9 +10,10 @@ import { FirmasReporte } from './entitys/firmas-reporte.entity';
 import { UploadFileS3Service } from 'src/services/upload-file-s3/upload-file-s3.service';
 import { ObservacionesModule } from 'src/observaciones/observaciones.module';
    import { ConfigModule } from '@nestjs/config';
+import { FirmasObs } from './entitys/firmas-obs.entity';
 @Module({
   imports:[
-    TypeOrmModule.forFeature([Reportes,FirmasReporte]),
+    TypeOrmModule.forFeature([Reportes,FirmasReporte,FirmasObs]),
     UsersModule,
     HotelesModule,
     AwsSdkModule,

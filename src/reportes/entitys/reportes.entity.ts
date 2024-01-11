@@ -5,6 +5,7 @@ import { FirmasReporte } from "src/reportes/entitys/firmas-reporte.entity";
 import { User } from "src/users/entitiys/user.entity";
 import { Entity,Column,PrimaryGeneratedColumn,
     OneToOne ,JoinColumn ,OneToMany,ManyToOne, JoinTable, ManyToMany} from "typeorm";
+import { FirmasObs } from "./firmas-obs.entity";
 
 @Entity({name:'reportes'})
 export class Reportes {
@@ -53,6 +54,4 @@ export class Reportes {
 
     @OneToMany(()=>FirmasReporte,firma=>firma.reporteF)
     firmasReporte:FirmasReporte[]
-
-
 }

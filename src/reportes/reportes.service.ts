@@ -18,6 +18,8 @@ import { Hoteles } from 'src/hoteles/entitys/hotel.entity';
 import { User } from 'src/users/entitiys/user.entity';
 import { ObservacionComentario } from 'src/observaciones/entitys/observacion-comentario.entity';
 import { map } from 'rxjs';
+import { FirmasObs } from './entitys/firmas-obs.entity';
+import { crearFirmaObsDto } from './dto/crear-firmas-obs.dto';
 
 const fs = require('fs')
 const path = require('path')
@@ -39,6 +41,9 @@ export class ReportesService {
     private reporteRepositorio: Repository<Reportes>,
     @InjectRepository(FirmasReporte)
     private firmasRepositorio: Repository<FirmasReporte>,
+    @InjectRepository(FirmasObs)
+    private firmasObsRepositorio: Repository<FirmasObs>,
+
     // @InjectRepository(Observacion)
     // private observacionRepositorio: Repository<Observacion>,
     private _user: UsersService,
@@ -78,6 +83,7 @@ export class ReportesService {
       .leftJoinAndMapMany('reportes.observaciones', Observacion, 'observacion', 'observacion.reporteIdReporte = reportes.idReporte')
       .orderBy('reportes.fechaRegistro', 'DESC')
       .orderBy('observacion.fechaRegistro', 'DESC')
+      .leftJoinAndMapMany('observacion.firmasObs', FirmasObs, 'firmas_obs', 'firmas_obs.obsF = observacion.idObservacion')
       .leftJoinAndMapMany('observacion.imagenes', ObservacionImagen, 'imagenes', 'imagenes.observacionIdObservacion = observacion.idObservacion')
       .leftJoinAndMapMany('observacion.comentarios', ObservacionComentario, 'comentarios', 'comentarios.observacionIdObservacion = observacion.idObservacion')
       .leftJoinAndMapMany('reportes.firmas', FirmasReporte, 'firmasReporte', 'firmasReporte.reporteId = reportes.idReporte ')
@@ -106,6 +112,7 @@ export class ReportesService {
       .andWhere("observacion.criticidad LIKE '%Alto%'")
       .orderBy('reportes.fechaRegistro', 'DESC')
       .orderBy('observacion.fechaRegistro', 'DESC')
+      .leftJoinAndMapMany('observacion.firmasObs', FirmasObs, 'firmas_obs', 'firmas_obs.obsF = observacion.idObservacion')
       .leftJoinAndMapMany('observacion.imagenes', ObservacionImagen, 'imagenes', 'imagenes.observacionIdObservacion = observacion.idObservacion')
       .leftJoinAndMapMany('observacion.comentarios', ObservacionComentario, 'comentarios', 'comentarios.observacionIdObservacion = observacion.idObservacion')
       .leftJoinAndMapMany('reportes.firmas', FirmasReporte, 'firmasReporte', 'firmasReporte.reporteId = reportes.idReporte ')
@@ -134,6 +141,7 @@ export class ReportesService {
       .leftJoinAndMapMany('reportes.observaciones', Observacion, 'observacion', 'observacion.reporteIdReporte = reportes.idReporte')
       .orderBy('reportes.fechaRegistro', 'DESC')
       .orderBy('observacion.fechaRegistro', 'DESC')
+      .leftJoinAndMapMany('observacion.firmasObs', FirmasObs, 'firmas_obs', 'firmas_obs.obsF = observacion.idObservacion')
       .leftJoinAndMapMany('observacion.imagenes', ObservacionImagen, 'imagenes', 'imagenes.observacionIdObservacion = observacion.idObservacion')
       .leftJoinAndMapMany('observacion.comentarios', ObservacionComentario, 'comentarios', 'comentarios.observacionIdObservacion = observacion.idObservacion')
       .leftJoinAndMapMany('reportes.firmas', FirmasReporte, 'firmasReporte', 'firmasReporte.reporteId = reportes.idReporte ')
@@ -317,7 +325,7 @@ export class ReportesService {
       return new HttpException('Reporte no encontrado', HttpStatus.NOT_FOUND);
     }
 
-    const path = `${firma.reporteId}/firmas/` + this._up.returnNameDateType(file['mimetype'])
+    const path = `firmas/${firma.reporteId}/` + this._up.returnNameDateType(file['mimetype'])
     const fileUP = await this._aws.upPublicFile(file.buffer, path);
     firma.path = path
     firma.url = fileUP.Location;
@@ -326,6 +334,24 @@ export class ReportesService {
     const saveFima = await this.firmasRepositorio.save(newFirma);
     newFirma.reporteF = reporteFound;
     return this.firmasRepositorio.save(saveFima);
+  }
+  async crearFirmaObs(firma: crearFirmaObsDto, file) {
+    const reporteFound = await this._observaciones.listarObsPorIdSinExecptionFirma(
+      firma.obsId,
+    );
+    if (!reporteFound) {
+      return new HttpException('Reporte no encontrado', HttpStatus.NOT_FOUND);
+    }
+
+    const path = `firmas-obs/${firma.obsId}/` + this._up.returnNameDateType(file['mimetype'])
+    const fileUP = await this._aws.upPublicFile(file.buffer, path);
+    firma.path = path
+    firma.url = fileUP.Location;
+    firma.nombreArchivo = fileUP.Key;
+    const newFirma = this.firmasObsRepositorio.create(firma);
+    const saveFima = await this.firmasObsRepositorio.save(newFirma);
+    newFirma.obsF = reporteFound;
+    return this.firmasObsRepositorio.save(saveFima);
   }
 
   async eliminarFirma(id: number, path: string) {

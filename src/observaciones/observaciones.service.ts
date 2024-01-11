@@ -174,7 +174,7 @@ export class ObservacionesService {
       where: {
         idObservacion: id,
       },
-      relations: ['observacionesImagen', 'observacionesImagen.user', 'observacionesComentario', 'observacionesComentario.user'],
+      relations: ['observacionesImagen', 'observacionesImagen.user', 'observacionesComentario', 'observacionesComentario.user','firmasObs'],
     })
 
 
@@ -219,6 +219,19 @@ export class ObservacionesService {
 
   }
 
+
+  async listarObsPorIdSinExecptionFirma(id: number) {
+    const observacionFound = await this.observacionRepositorio.findOne({
+      where: {
+        idObservacion: id,
+        esActivo: "1",
+      },
+    });
+    
+    const updateObservacion = Object.assign(observacionFound, {fimaConformidad:true});
+    await this.observacionRepositorio.save(updateObservacion);
+    return observacionFound;
+  }
 
 
 }

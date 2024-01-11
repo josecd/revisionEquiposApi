@@ -412,7 +412,53 @@
 
                         </div>
                     </section>
+                    
 
+                    {{!-- firma conformidad  --}}
+                     {{#if firmasObs}}
+                    <div class="card shadow mb-4" style="text-align: initial !important;">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Firma Conformidad</h6>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="row">
+                                {{#each firmasObs}}
+                                <div class="col" >
+                                    <div class="card border-left-primary shadow h-100 py-2">
+                                        <div class="card-body" style="width: 40%;">
+                                            <div class=" no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div style="FONT-SIZE: 13px;"
+                                                        class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                        {{tipo}}</div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                        
+                                                        <h3 >{{nombreFirma}}</h3>
+                                                        <br>
+                                                        <img style="  object-fit: cover;
+                                                        width:50%;
+                                                        loading="lazy"
+                                                        height:100%;" src="{{url}}" alt="">
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/each}}
+
+                            </div>
+
+                        </div>
+                    </div>
+                    {{/if}}
+
+            
 
 
                     <!-- Comentario a la entrega del equipo -->
@@ -619,7 +665,6 @@
     </div>
     </div>
     <script>
-
         var datos = document.getElementById("converted").innerHTML
         document.getElementById("asda").innerHTML = datos
         var date = new Date(datos);

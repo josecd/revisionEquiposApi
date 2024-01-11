@@ -3,6 +3,7 @@ import { Entity,Column,PrimaryGeneratedColumn,
     OneToOne ,JoinColumn ,OneToMany,ManyToOne, JoinTable} from "typeorm";
 import { ObservacionImagen } from "./observacion-imagen.entity";
 import { ObservacionComentario } from "./observacion-comentario.entity";
+import { FirmasObs } from "src/reportes/entitys/firmas-obs.entity";
 
 
 
@@ -90,8 +91,6 @@ export class Observacion {
     @Column({length: 2500, nullable:true})
     comentariosEntregaEquip: string
 
-
-
-  
-
+    @OneToMany(()=>FirmasObs,firma=>firma.obsF)
+    firmasObs:FirmasObs[]
 }
