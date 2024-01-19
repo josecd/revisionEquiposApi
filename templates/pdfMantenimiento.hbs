@@ -393,27 +393,6 @@
                         </div>
                     </section>
 
-                    <!-- Fallas detectadas durante el servicio -->
-                    <section style="text-align: initial !important;">
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Fallas detectadas durante el servicio</h6>
-                            </div>
-
-                            {{#if fallaDetectadaDuraSer}}
-                            <div class="card-body">
-                                {{fallaDetectadaDuraSer}}
-                            </div>
-                            {{else}}
-                            <div class="card-body">
-                                No cuenta con Fallas detectadas durante el servicio
-                            </div>
-                            {{/if}}
-
-                        </div>
-                    </section>
-                    
-
                     {{!-- firma conformidad  --}}
                      {{#if firmasObs}}
                     <div class="card shadow mb-4" style="text-align: initial !important;">
@@ -456,6 +435,29 @@
                         </div>
                     </div>
                     {{/if}}
+
+
+                    <!-- Fallas detectadas durante el servicio -->
+                    <section style="text-align: initial !important;">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Fallas detectadas durante el servicio</h6>
+                            </div>
+
+                            {{#if fallaDetectadaDuraSer}}
+                            <div class="card-body">
+                                {{fallaDetectadaDuraSer}}
+                            </div>
+                            {{else}}
+                            <div class="card-body">
+                                No cuenta con Fallas detectadas durante el servicio
+                            </div>
+                            {{/if}}
+
+                        </div>
+                    </section>
+                    
+
 
             
 
