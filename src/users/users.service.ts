@@ -51,7 +51,7 @@ export class UsersService {
             relations: ['perfil']
 
         })
-        console.log(userFound);
+        // console.log(userFound);
 
         if (!userFound) {
             return new HttpException('Perfil no exontrado', HttpStatus.NOT_FOUND)
@@ -61,7 +61,7 @@ export class UsersService {
     }
 
     async listarPerfiloPorID(id: number) {
-        console.log('Entro', id);
+        // console.log('Entro', id);
 
         const userFound = await this.userRepositorio.findOne({
             where: {
@@ -70,7 +70,7 @@ export class UsersService {
             relations: ['perfil']
 
         })
-        console.log(userFound);
+        // console.log(userFound);
 
         if (!userFound) {
             return new HttpException('Usuario no exontrado', HttpStatus.NOT_FOUND)
@@ -168,9 +168,9 @@ export class UsersService {
         if (!userFound) {
             return new HttpException('Usuario no encontrado existe', HttpStatus.CONFLICT)
         }
-        console.log('datos');
+        // console.log('datos');
 
-        console.log('files', file.mimetype);
+        // console.log('files', file.mimetype);
 
         const path = `firmas/${id}/observacion/` + this._up.returnNameDateType(file['mimetype']);
         const imgBucket = await this._up.upPublicFile(file.buffer, path);

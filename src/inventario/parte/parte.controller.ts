@@ -48,8 +48,6 @@ export class ParteController {
 
   @Delete('/img/:id')
   removeImg(@Param('id') id: string) {
-    console.log('asd',id);
-    
     return this.parteService.deleteImg(+id);
   }
 }

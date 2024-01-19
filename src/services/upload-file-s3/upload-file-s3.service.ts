@@ -24,7 +24,7 @@ export class UploadFileS3Service {
             .promise();
           return uploadResult;
         } catch (err) {
-          console.log(err);
+          console.error(err);
         }
       }
 

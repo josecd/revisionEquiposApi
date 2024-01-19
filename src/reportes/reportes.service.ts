@@ -198,14 +198,14 @@ export class ReportesService {
       const query = await this.reporteRepositorio.query(`SELECT idReporte FROM reportes WHERE MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio} AND hotelId  IN(${filter?.hotel})`)
       const id = await query.map((e: any) => { return e.idReporte })
       const query2 = await this.reporteRepositorio.query(`SELECT * FROM observacion LEFT JOIN reportes ON reportes.idReporte = observacion.reporteIdReporte WHERE observacion.reporteId IN(${id}) `)
-      console.log(id.toString());
+      // console.log(id.toString());
       // console.log(query2);
 
     } else {
       const query = await this.reporteRepositorio.query(`SELECT idReporte FROM reportes WHERE MONTH(reportes.fechaRegistro) = ${filter?.mes} AND YEAR(reportes.fechaRegistro) = ${filter?.anio}`)
       const id = await query.map((e: any) => { return e.idReporte })
       const query2 = await this.reporteRepositorio.query(`SELECT * FROM observacion LEFT JOIN reportes ON reportes.idReporte = observacion.reporteIdReporte WHERE observacion.reporteId IN(${id}) `)
-      console.log(id.toString());
+      // console.log(id.toString());
       // console.log(query2);
     }
     // const queryView = await this.observacionRepositorio.createQueryBuilder('observacion')
@@ -438,7 +438,7 @@ export class ReportesService {
       // Now we have the html code of our template in res object
       // you can check by logging it on console
       // console.log(res)
-      console.log(res);
+      // console.log(res);
 
       console.log("Compiing the template with handlebars")
       const template = hb.compile(res, { strict: true });
