@@ -679,7 +679,6 @@ export class ReportesService {
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
-          "--headless=new",
           '--disable-dev-shm-usage',
           '--disable-accelerated-2d-canvas',
           '--no-first-run',
