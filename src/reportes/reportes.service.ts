@@ -22,6 +22,7 @@ import { FirmasObs } from './entitys/firmas-obs.entity';
 import { crearFirmaObsDto } from './dto/crear-firmas-obs.dto';
 import ConvertAPI from 'convertapi';
 import axios from 'axios';
+import { AxiosResponse } from 'axios';
 
 const ILovePDFApi = require('@ilovepdf/ilovepdf-nodejs');
 const instance = new ILovePDFApi('project_public_33250f4b9d36d997d154d12ae9c77ba7_HltaNe37d29e29aa1df63904dcd6041584421', 'secret_key_b3435cdcba0b1e1e5e83e74ad20608bb_-tBGR7aaec2723ff3d22b9758a881e437d624x|x');
@@ -744,10 +745,10 @@ export class ReportesService {
       const instance = new ILovePDFApi('project_public_33250f4b9d36d997d154d12ae9c77ba7_HltaNe37d29e29aa1df63904dcd6041584421', 'secret_key_b3435cdcba0b1e1e5e83e74ad20608bb_-tBGR7aaec2723ff3d22b9758a881e437d624x|x');
 
       // Crear una nueva tarea para la compresión
-      const compressionTask = instance.newTask('compress');
+       const compressionTask = instance.newTask('compress'); 
   
       // Convertir el archivo en un objeto Buffer (asumiendo que files[0] ya es un Buffer)
-      const fileBuffer = Buffer.from(files[0].buffer);
+       const fileBuffer = Buffer.from(files[0].buffer);
   
       // Agregar el archivo para la compresión
       await compressionTask.addFile(fileBuffer, 'archivo_comprimir.pdf');
@@ -760,8 +761,31 @@ export class ReportesService {
   
       console.log('Compresión completada');
       // Puedes hacer algo con el archivo comprimido aquí, por ejemplo, guardarlo o enviarlo como respuesta
-  
-      return compressedFile;
+   
+
+      /* const compressionTask = instance.newTask('compress');
+
+      compressionTask.start()
+        .then(() => {
+          // Agregar archivos para la compresión
+          const fileToCompress = new ILovePDFFile(files[0].buffer, 'archivo_comprimir.pdf');
+          return compressionTask.addFile(fileToCompress);
+        })
+        .then(() => {
+          // Procesar la compresión
+          return compressionTask.process();
+        })
+        .then(() => {
+          // Descargar el archivo comprimido
+          return compressionTask.download();
+        })
+        .then((data) => {
+          console.log('Compresión completada');
+          // Puedes hacer algo con el archivo comprimido aquí
+        })
+        .catch((error) => {
+          console.error('Error en la compresión:', error);
+        }); */
 
     } catch (error) {
       console.error(error);
@@ -770,25 +794,31 @@ export class ReportesService {
   }
 
 
-  async compressPDF(files): Promise<any> {
-    const apiKey = "secret_key_b3435cdcba0b1e1e5e83e74ad20608bb_-tBGR7aaec2723ff3d22b9758a881e437d624";
-    const apiUrl = 'https://api.ilovepdf.com/v1/start/compress';
-
+  async compresspdfv2(files){
+    
+    console.log(files[0]);
+    
     try {
-      const response = await axios.post(
-        apiUrl,
-        { files: files[0] },
-        {
-          headers: {
-            Authorization: `Bearer ${apiKey}`,
-          },
-        },
-      )
-      console.log(response.data);
+      const instance = new ILovePDFApi('project_public_33250f4b9d36d997d154d12ae9c77ba7_HltaNe37d29e29aa1df63904dcd6041584421', 'secret_key_b3435cdcba0b1e1e5e83e74ad20608bb_-tBGR7aaec2723ff3d22b9758a881e437d624x|x');
+      const task = instance.newTask('compress');
+
+      await task.addFile(files[0].buffer);
+
+      // Process the task to compress
+      await task.process();
+
+      // Download the compressed PDF as a Buffer
+      const downloadResponse: AxiosResponse<Buffer> = await axios.get(task.downloadUrl, {
+        responseType: 'arraybuffer',
+      });
+
+      console.log("downloadResponse",downloadResponse);
       
-      return response.data;
+      return downloadResponse.data;
+
     } catch (error) {
-      throw new Error(`Error al comprimir PDF: ${error.message}`);
+      console.error(error);
+      throw new Error('Error al comprimir el archivo PDF');
     }
   }
 }
