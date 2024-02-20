@@ -715,6 +715,7 @@ export class ReportesService {
           bottom: '10mm',
         },
         format: 'Tabloid',
+        quality: 'low'
       });
   
       await browser.close();
