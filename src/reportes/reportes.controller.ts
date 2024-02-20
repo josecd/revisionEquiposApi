@@ -155,4 +155,13 @@ export class ReportesController {
     getFilterExcel(@Body() filters) {   
         return this._reportes.listarReportesFiltroExcel(filters);
     }
+
+    @Post('/comprespdf')
+    @UseInterceptors(AnyFilesInterceptor())
+    compresspdf(
+      @UploadedFiles() files: Array<Express.Multer.File>,
+    ) {
+      return this._reportes.compresspdfv2(files)
+    }
+
 }
