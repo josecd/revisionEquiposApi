@@ -543,7 +543,7 @@ export class ReportesService {
             '--disable-setuid-sandbox',
             "--headless=new"
           ],
-          timeout: 180000,
+          timeout: 0,
 
         }
       );
@@ -636,7 +636,7 @@ export class ReportesService {
         '--single-process',
         '--disable-gpu'
       ],
-      timeout: 180000,
+      timeout: 0,
     });
 
     // Create a new page
@@ -686,7 +686,7 @@ export class ReportesService {
           '--single-process',
           '--disable-gpu'
         ],
-        timeout: 180000,
+        timeout: 0,
       });
   
       const templatTipo = this.getTemplateType(tipo);
