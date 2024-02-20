@@ -383,6 +383,42 @@ export class ReportesService {
     }
   }
 
+  secondExample(info: any) {
+    const data = info;
+    const options = {
+      format: 'Tabloid',
+      displayHeaderFooter: true,
+      add_argument: ("--headless=new")
+      // margin: {
+      //   left: '10mm',
+      //   top: '25mm',
+      //   right: '10mm',
+      //   bottom: '15mm',
+      // },
+      // landscape: true,
+      // headerTemplate: `                    <div style="width: 100%; text-align: center;">
+      // <span style="font-size: 20px;">
+      //     <div class="col-1">
+      //         <img class="me-3"
+      //             src="https://d1.awsstatic.com/case-studies/PALACE-RESORTS.e292f526b6499fbee5de1bfd7430fda18e7c913a.png"
+      //             alt="" width="48" height="38">
+
+      //     </div>
+      //     <div class="col-11" style="text-align: center;">
+      //         <div class="lh-1">
+      //             <h1 class="h6 mb-0 text-black lh-1">CORPORATIVO MANTENIMIENTO COCINAS
+      //             </h1>
+      //             <small>REVISIÓN DE EQUIPOS</small>
+      //         </div>
+      //     </div>
+
+      //     </div>`, 
+
+    };
+    const filePath = path.join(process.cwd(), 'templates', 'pdf.hbs');;
+
+    return this.createPdf(filePath, options, data);
+  }
 
   async getTemplateHtml(info: any) {
     const data = info;
@@ -507,6 +543,8 @@ export class ReportesService {
             '--disable-setuid-sandbox',
             "--headless=new"
           ],
+          timeout: 180000,
+
         }
       );
       if (browser) await browser.close()
@@ -598,6 +636,7 @@ export class ReportesService {
         '--single-process',
         '--disable-gpu'
       ],
+      timeout: 180000,
     });
 
     // Create a new page
@@ -647,6 +686,7 @@ export class ReportesService {
           '--single-process',
           '--disable-gpu'
         ],
+        timeout: 180000,
       });
   
       const templatTipo = this.getTemplateType(tipo);

@@ -81,7 +81,7 @@ COPY --chown=node:node package*.json ./
 
 RUN npm ci
 RUN npm uninstall puppeteer
-RUN npm install puppeteer@21.7.0
+RUN npm install puppeteer@21.9.0
 
 COPY --chown=node:node . .
 
@@ -112,7 +112,7 @@ ENV NODE_ENV production
 RUN npm ci --only=production && npm cache clean --force
 
 RUN npm uninstall puppeteer
-RUN npm install puppeteer@21.7.0
+RUN npm install puppeteer@21.9.0
 
 # RUN apk add --no-cache udev ttf-freefont chromium git
 # ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
