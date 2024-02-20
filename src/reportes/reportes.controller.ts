@@ -161,7 +161,7 @@ export class ReportesController {
     compresspdf(
       @UploadedFiles() files: Array<Express.Multer.File>,
     ) {
-      return this._reportes.compresspdfv2(files)
+      return this._reportes.compresspdf(files)
     }
 
 }
