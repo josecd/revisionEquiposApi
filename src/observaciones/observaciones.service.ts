@@ -71,30 +71,36 @@ export class ObservacionesService {
   }
 
   async eliminarObservacion(id: number) {
+    // Buscar la observación
     const observacionFound = await this.observacionRepositorio.findOne({
       where: {
         idObservacion: id,
       },
-    })
+    });
 
     if (!observacionFound) {
-      return new HttpException('Observacion no encontrada', HttpStatus.NOT_FOUND);
-    } else {
-
-      const queyView = await this.observacionImgRepositorio
-        .createQueryBuilder('observacion_imagen')
-        .where(`observacion_imagen.observacionId = ${id}`)
-        .getMany()
-      const obsObsoleto = await this.observacionImgRepositorio.remove(queyView)
-      obsObsoleto.forEach(async (res) => {
-        this._up.deleteBucket(res.path);
-      })
-      const result = await this.observacionRepositorio.delete({ idObservacion: id });
-      return new HttpException('Se elimino', HttpStatus.ACCEPTED)
-
+      throw new HttpException('Observacion no encontrada', HttpStatus.NOT_FOUND);
     }
-  }
 
+    // Eliminar comentarios asociados
+    await this.observacionComnetaioRepositorio.delete({ observacion: observacionFound });
+
+
+    // Eliminar imágenes asociadas
+    const imagenes = await this.observacionImgRepositorio.find({
+      where: { observacion: { idObservacion: id } },
+      relations: ['observacion'],
+    });
+    imagenes.forEach(async (imagen) => {
+      await this._up.deleteBucket(imagen.path);
+    });
+    await this.observacionImgRepositorio.remove(imagenes);
+
+    // Eliminar la observación
+    await this.observacionRepositorio.remove(observacionFound);
+
+    return new HttpException('Se eliminó la observación y sus datos asociados', HttpStatus.ACCEPTED);
+  }
   async agregarImagenesObservacion(files, imgObs: crearImgObservacionDto) {
     if (!imgObs.observacionId) {
       return new HttpException(
@@ -203,6 +209,28 @@ export class ObservacionesService {
     newObservacion.observacion = obsFound;
     const saveObservacion = await this.observacionComnetaioRepositorio.save(newObservacion);
     return this.observacionComnetaioRepositorio.save(saveObservacion);
+  }
+
+  async editarComentario(idComentario: number, nuevoComentario: crearComentarioObsDto) {
+    // Buscar el comentario existente por su ID
+    const comentarioExistente = await this.observacionComnetaioRepositorio.findOne({
+      where: {
+        idObservacionComentario: idComentario,
+      },
+    });
+  
+    // Verificar si el comentario existe
+    if (!comentarioExistente) {
+      throw new HttpException('Comentario no encontrado', HttpStatus.NOT_FOUND);
+    }
+  
+    // Actualizar los campos del comentario con los nuevos valores
+    comentarioExistente.comentario = nuevoComentario.comentario;  // Reemplaza 'texto' con el campo que deseas editar
+  
+    // Guardar los cambios en la base de datos
+    const comentarioEditado = await this.observacionComnetaioRepositorio.save(comentarioExistente);
+  
+    return comentarioEditado;
   }
 
   firstExample() {
