@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, Put } from '@nestjs/common';
 /* eslint-disable @typescript-eslint/no-empty-function */
 import {
   Body,
@@ -72,6 +72,12 @@ export class ObservacionesController {
   agregarComentario(@Body() comentario) {
     return this._observaciones.crearComentario(comentario);
   }
+
+  @Put('editarComentario/:id')
+    async editarComentario(@Param('id') idComentario: number, @Body() nuevoComentario) {
+    return this._observaciones.editarComentario(idComentario, nuevoComentario);
+  }
+
 
   // @Get('indo')
   // listarReportes() {
